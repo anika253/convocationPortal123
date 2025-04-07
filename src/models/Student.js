@@ -1,11 +1,12 @@
 const mongoose = require("mongoose");
-const studentSchema = new mongoose.schema(
+
+const studentSchema = new mongoose.Schema(
   {
-    name: { type: string, required: true },
-    email: { type: string, required: true, unique: true },
-    rollno: { type: string, required: true, qunique: true },
-    department: { type: string, required: true },
-    registered: { type: boolean, required: true },
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    rollno: { type: String, required: true, unique: true },
+    department: { type: String, required: true },
+    registered: { type: Boolean, required: true },
   },
   { timestamps: true }
 );
