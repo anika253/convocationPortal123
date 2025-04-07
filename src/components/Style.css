@@ -1,0 +1,31 @@
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  background: #007bff;
+  padding: 10px 20px;
+  color: white;
+}
+
+.header a {
+  text-decoration: none;
+  color: white;
+  padding: 5px 10px;
+}
+
+.header a:hover {
+  background: white;
+  color: #007bff;
+  border-radius: 5px;
+}
+
+/* Footer */
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: #333;
+  color: white;
+  text-align: center;
+  padding: 10px;
+}
