@@ -1,4 +1,3 @@
-// src/components/StudentRegister.jsx
 import React, { useState } from "react";
 import axios from "axios";
 
@@ -9,30 +8,39 @@ function StudentRegister() {
     password: "",
   });
 
+  // Input Change Handler
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // Form Submit Handler
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Send the registration data along with role 'student'
       const res = await axios.post("http://localhost:5000/api/auth/register", {
         ...form,
-        role: "student",
+        role: "student", // adding role
       });
       alert("Student Registration Successful!");
       console.log(res.data);
-      // Optionally redirect to login page or dashboard
+
+      // Reset form after successful registration
+      setForm({
+        name: "",
+        email: "",
+        password: "",
+      });
     } catch (err) {
-      alert(err.response?.data?.msg || "Registration Failed!");
       console.error(err);
+      const message = err.response?.data?.msg || "Registration Failed!";
+      alert(message);
     }
   };
 
   return (
     <div style={{ textAlign: "center" }}>
       <h2>Student Registration</h2>
+
       <form
         onSubmit={handleSubmit}
         style={{ display: "inline-block", textAlign: "left" }}
@@ -47,6 +55,7 @@ function StudentRegister() {
             required
           />
         </div>
+
         <div>
           <label>Email: </label>
           <input
@@ -57,6 +66,7 @@ function StudentRegister() {
             required
           />
         </div>
+
         <div>
           <label>Password: </label>
           <input
@@ -67,7 +77,10 @@ function StudentRegister() {
             required
           />
         </div>
-        <button type="submit">Register as Student</button>
+
+        <button type="submit" style={{ marginTop: "10px" }}>
+          Register
+        </button>
       </form>
     </div>
   );
