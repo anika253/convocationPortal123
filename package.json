@@ -10,15 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-<<<<<<< HEAD
     "axios": "^1.8.4",
+    "nodemailer": "^6.10.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-router-dom": "^7.4.1"
-=======
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
->>>>>>> 354690b74332ad4e249e3ca12a2da39b7912ea4d
+    "react-router-dom": "^7.5.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",

@@ -1,15 +1,26 @@
+// src/components/HomePage.jsx
 import React from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const Home = () => {
+function HomePage() {
+  const navigate = useNavigate();
+
+  const handleLoginClick = () => {
+    // We’ll navigate to a route where the user chooses their role (Admin/Student)
+    navigate("/choose-role?type=login");
+  };
+
+  const handleRegisterClick = () => {
+    navigate("/choose-role?type=register");
+  };
+
   return (
-    <div>
+    <div style={{ textAlign: "center" }}>
       <h1>Welcome to ConvPortal</h1>
-      <Link to="/login">
-        <button>Admin Login</button>
-      </Link>
+      <button onClick={handleLoginClick}>Login</button>
+      <button onClick={handleRegisterClick}>Register</button>
     </div>
   );
-};
+}
 
-export default Home;
+export default HomePage;

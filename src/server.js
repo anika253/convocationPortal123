@@ -1,21 +1,30 @@
-const express = require("express");
-const cors = require("cors");
-const connectDB = require("./config/db");
+// server.js
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+import dotenv from "dotenv";
 
-const adminRoutes = require("./routes/adminRoutes");
-const studentRoutes = require("./routes/studentRoutes");
+dotenv.config();
+
+import authRoute from "./Routes/authRoutes.js";
 
 const app = express();
-
 app.use(cors());
 app.use(express.json());
 
-// Connect to MongoDB
-connectDB();
+// Use the authentication routes
+app.use("/api/auth", authRoute);
 
-// Routes
-app.use("/api/admin", adminRoutes);
-app.use("/api/student", studentRoutes);
-
-const PORT = 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Connect to MongoDB using your connection string from .env
+mongoose
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("Connected to MongoDB");
+    app.listen(5000, () => console.log("Server running on port 5000"));
+  })
+  .catch((err) => {
+    console.error("MongoDB connection error:", err);
+  });

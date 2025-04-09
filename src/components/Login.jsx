@@ -1,50 +1,55 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
-const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+function Login() {
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
 
-  const handleLogin = async (e) => {
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/api/admin/login", {
-        email,
-        password,
-      });
-
-      localStorage.setItem("token", res.data.token);
+      const res = await axios.post(
+        "http://localhost:5000/api/auth/login",
+        form
+      );
       alert("Login Successful!");
-      navigate("/admin");
+      console.log(res.data);
+      // localStorage.setItem("token", res.data.token); // if token given
     } catch (err) {
-      alert("Invalid Credentials!");
+      alert(err.response.data.msg || "Login Failed!");
     }
   };
 
   return (
-    <div>
-      <h2>Admin Login</h2>
-      <form onSubmit={handleLogin}>
+    <div className="login-container">
+      <h2>Login</h2>
+      <form onSubmit={handleSubmit}>
         <input
           type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Enter Email"
+          name="email"
+          value={form.email}
+          onChange={handleChange}
           required
         />
         <input
           type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Enter Password"
+          name="password"
+          value={form.password}
+          onChange={handleChange}
           required
         />
         <button type="submit">Login</button>
       </form>
     </div>
   );
-};
+}
 
 export default Login;

@@ -1,41 +1,38 @@
-const Admin = require("../models/Admin");
-const jwt = require("jsonwebtoken");
+const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
-const signup = async (req, res) => {
+// Register
+exports.registerUser = async (req, res) => {
+  const { name, email, password } = req.body;
   try {
-    const { email, password } = req.body;
-
-    const existingAdmin = await Admin.findOne({ email });
-    if (existingAdmin) return res.status(400).json({ message: "Admin already exists" });
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const admin = new Admin({ email, password: hashedPassword });
-    await admin.save();
-
-    res.status(201).json({ message: "Admin created successfully" });
+    const userExist = await User.findOne({ email });
+    if (userExist) {
+      return res.status(400).json({ msg: "User Already Exists" });
+    }
+    const hashPass = await bcrypt.hash(password, 10);
+    const newUser = await User.create({ name, email, password: hashPass });
+    res.status(201).json(newUser);
   } catch (err) {
-    res.status(500).json({ message: "Error while signup" });
+    res.status(500).json({ msg: err.message });
   }
 };
 
-const login = async (req, res) => {
+// Login
+exports.loginUser = async (req, res) => {
+  const { email, password } = req.body;
   try {
-    const { email, password } = req.body;
-
-    const admin = await Admin.findOne({ email });
-    if (!admin) return res.status(400).json({ message: "Invalid Credentials" });
-
-    const isMatch = await bcrypt.compare(password, admin.password);
-    if (!isMatch) return res.status(400).json({ message: "Invalid Credentials" });
-
-    const token = jwt.sign({ id: admin._id }, "secretkey", { expiresIn: "1h" });
-
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ msg: "User Not Found" });
+    }
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ msg: "Invalid Credentials" });
+    }
+    const token = jwt.sign({ id: user._id }, "SECRET_KEY");
     res.status(200).json({ token });
   } catch (err) {
-    res.status(500).json({ message: "Error while login" });
+    res.status(500).json({ msg: err.message });
   }
 };
-
-module.exports = { signup, login };

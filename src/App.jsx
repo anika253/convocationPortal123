@@ -1,19 +1,38 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./components/Login";
-import AdminDashboard from "./components/AdminDashboard";
-import Home from "./components/Home";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-const App = () => {
+import HomePage from "./components/Home";
+import ChooseRole from "./components/ChooseRole";
+import AdminLogin from "./components/AdminLogin";
+import StudentLogin from "./components/StudentLogin";
+// Same idea for Register pages if separate
+import AdminRegister from "./components/AdminRegister";
+import StudentRegister from "./components/StudentRegister";
+
+function App() {
   return (
-    <Router>
+    <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/admin" element={<AdminDashboard />} />
+        {/* Home Page */}
+        <Route path="/" element={<HomePage />} />
+
+        {/* Role Selection */}
+        <Route path="/choose-role" element={<ChooseRole />} />
+
+        {/* Admin Login */}
+        <Route path="/login/admin" element={<AdminLogin />} />
+
+        {/* Student Login */}
+        <Route path="/login/student" element={<StudentLogin />} />
+
+        {/* Admin Register */}
+        <Route path="/register/admin" element={<AdminRegister />} />
+
+        {/* Student Register */}
+        <Route path="/register/student" element={<StudentRegister />} />
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
-};
+}
 
 export default App;
