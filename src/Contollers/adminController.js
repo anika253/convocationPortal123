@@ -2,6 +2,7 @@ const Admin = require("../models/Admin");
 const Student = require("../models/Student");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const sendMail = require("../utils/mailer"); // <-- Add this
 
 // Admin Registration
 exports.adminRegister = async (req, res) => {
@@ -20,8 +21,18 @@ exports.adminRegister = async (req, res) => {
 
     await newAdmin.save();
 
-    res.status(201).json({ message: "Admin registered successfully" });
+    // Send Email After Registration
+    await sendMail(
+      email,
+      "Admin Registration Successful - Conv Portal",
+      `Hello Admin,\n\nYour registration on Conv Portal was successful.\n\nRegards,\nTeam`
+    );
+
+    res
+      .status(201)
+      .json({ message: "Admin registered successfully & Mail sent" });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Server Error" });
   }
 };
