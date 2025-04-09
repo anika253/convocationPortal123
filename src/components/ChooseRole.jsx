@@ -6,31 +6,38 @@ function ChooseRole() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // We can read the query param ?type=login or ?type=register
   const searchParams = new URLSearchParams(location.search);
   const type = searchParams.get("type"); // 'login' or 'register'
 
   const handleAdminClick = () => {
-    if (type === "login") {
-      navigate("/login/admin");
-    } else {
-      navigate("/register/admin");
-    }
+    navigate(type === "login" ? "/login/admin" : "/register/admin");
   };
 
   const handleStudentClick = () => {
-    if (type === "login") {
-      navigate("/login/student");
-    } else {
-      navigate("/register/student");
-    }
+    navigate(type === "login" ? "/login/student" : "/register/student");
   };
 
   return (
-    <div style={{ textAlign: "center" }}>
-      <h2>Select your role</h2>
-      <button onClick={handleAdminClick}>Admin</button>
-      <button onClick={handleStudentClick}>Student</button>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-cyan-100 via-blue-100 to-purple-100">
+      <div className="bg-white shadow-2xl rounded-2xl p-10 w-full max-w-md text-center">
+        <h2 className="text-3xl font-bold text-gray-800 mb-8">
+          {type === "login" ? "Login As" : "Register As"}
+        </h2>
+        <div className="flex flex-col space-y-4">
+          <button
+            onClick={handleAdminClick}
+            className="bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg text-lg font-semibold transition duration-200"
+          >
+            Admin
+          </button>
+          <button
+            onClick={handleStudentClick}
+            className="bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg text-lg font-semibold transition duration-200"
+          >
+            Student
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
