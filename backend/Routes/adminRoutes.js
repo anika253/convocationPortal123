@@ -6,7 +6,7 @@ const {
   adminRegister,
   getAllStudents,
   deleteStudent,
-} = require("../controllers/adminController");
+} = require("../Controllers/adminController");
 
 // Admin Register API
 router.post("/register", adminRegister);

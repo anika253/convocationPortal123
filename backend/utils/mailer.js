@@ -1,5 +1,6 @@
-import nodemailer from "nodemailer";
-import dotenv from "dotenv";
+const nodemailer = require("nodemailer");
+
+const dotenv = require("dotenv");
 
 dotenv.config(); // .env values load karne ke liye
 
@@ -30,4 +31,4 @@ const sendMail = async (email, subject, message) => {
   });
 };
 
-export default sendMail;
+module.exports = sendMail;

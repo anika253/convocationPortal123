@@ -5,7 +5,6 @@ import HomePage from "./components/Home";
 import ChooseRole from "./components/ChooseRole";
 import AdminLogin from "./components/AdminLogin";
 import StudentLogin from "./components/StudentLogin";
-// Same idea for Register pages if separate
 import AdminRegister from "./components/AdminRegister";
 import StudentRegister from "./components/StudentRegister";
 
