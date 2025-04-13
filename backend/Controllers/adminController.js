@@ -1,8 +1,8 @@
 const Admin = require("../models/Admin");
 const Student = require("../models/Student");
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcrypt"); // ✅ Using native bcrypt
 const jwt = require("jsonwebtoken");
-const sendMail = require("../utils/mailer"); // <-- Add this
+const sendMail = require("../utils/mailer");
 
 // Admin Registration
 exports.adminRegister = async (req, res) => {
@@ -16,12 +16,11 @@ exports.adminRegister = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-
     const newAdmin = new Admin({ email, password: hashedPassword });
 
     await newAdmin.save();
 
-    // Send Email After Registration
+    // Send confirmation email
     await sendMail(
       email,
       "Admin Registration Successful - Conv Portal",
@@ -30,9 +29,9 @@ exports.adminRegister = async (req, res) => {
 
     res
       .status(201)
-      .json({ message: "Admin registered successfully & Mail sent" });
+      .json({ message: "Admin registered successfully & mail sent" });
   } catch (error) {
-    console.log(error);
+    console.error("Admin Register Error:", error);
     res.status(500).json({ message: "Server Error" });
   }
 };
@@ -49,15 +48,17 @@ exports.adminLogin = async (req, res) => {
     }
 
     const isMatch = await bcrypt.compare(password, admin.password);
-
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    const token = jwt.sign({ id: admin._id }, "secretKey", { expiresIn: "1h" });
+    const token = jwt.sign({ id: admin._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
 
     res.status(200).json({ token });
   } catch (error) {
+    console.error("Admin Login Error:", error);
     res.status(500).json({ message: "Server Error" });
   }
 };

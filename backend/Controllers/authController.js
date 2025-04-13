@@ -1,11 +1,11 @@
 const Admin = require("../models/Admin");
 const Student = require("../models/Student");
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcrypt");
+const sendMail = require("../utils/mailer"); // Importing the sendMail function
 
-// Admin Register
+// ----------------------- Admin Register -----------------------
 const registerAdmin = async (req, res) => {
   try {
-    // Check if email and password exist
     if (!req.body.email || !req.body.password) {
       return res
         .status(400)
@@ -13,43 +13,53 @@ const registerAdmin = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
     const newAdmin = new Admin({
       email: req.body.email,
       password: hashedPassword,
     });
 
     await newAdmin.save();
+
+    // Send confirmation email to Admin
+    await sendMail(
+      req.body.email,
+      "Admin Registration Successful",
+      "Hello Admin,\n\nYour registration was successful!\n\nRegards,\nTeam"
+    );
+
     res.status(201).json({ message: "Admin registered successfully!" });
   } catch (err) {
-    console.error("Registration error:", err);
+    console.error("Admin Registration error:", err);
     res.status(500).json({
-      message: "Registration failed",
-      error: err.message, // More detailed error
+      message: "Admin registration failed",
+      error: err.message,
     });
   }
 };
 
-// Admin Login
+// ----------------------- Admin Login -----------------------
 const loginAdmin = async (req, res) => {
   try {
     const admin = await Admin.findOne({ email: req.body.email });
-    if (!admin) return res.status(400).json("Admin Not Found");
+    if (!admin) return res.status(400).json({ message: "Admin Not Found" });
 
     const validPass = await bcrypt.compare(req.body.password, admin.password);
-    if (!validPass) return res.status(400).json("Invalid Credentials");
+    if (!validPass)
+      return res.status(400).json({ message: "Invalid Credentials" });
 
-    res.status(200).json("Admin Login Successful");
+    res.status(200).json({ message: "Admin Login Successful" });
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json({
+      message: "Admin login failed",
+      error: err.message,
+    });
   }
 };
 
-// Student Register
-
-// Student Register
+// ----------------------- Student Register -----------------------
 const registerStudent = async (req, res) => {
   try {
-    // Check if student already exists
     const existingStudent = await Student.findOne({
       $or: [{ email: req.body.email }, { rollno: req.body.rollno }],
     });
@@ -63,23 +73,26 @@ const registerStudent = async (req, res) => {
       });
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-    // Create new student
     const newStudent = new Student({
       name: req.body.name,
       email: req.body.email,
       password: hashedPassword,
       rollno: req.body.rollno,
       department: req.body.department,
-      registered: req.body.registered || false, // Default to false if not provided
+      registered: req.body.registered || false,
     });
 
-    // Save student
     await newStudent.save();
 
-    // Return response (excluding password)
+    // Send confirmation email to Student
+    await sendMail(
+      req.body.email,
+      "Student Registration Successful",
+      `Hello ${req.body.name},\n\nYou have been successfully registered!\n\nRegards,\nTeam`
+    );
+
     const studentData = newStudent.toObject();
     delete studentData.password;
 
@@ -88,25 +101,23 @@ const registerStudent = async (req, res) => {
       student: studentData,
     });
   } catch (err) {
-    console.error("Registration error:", err);
+    console.error("Student Registration error:", err);
     res.status(500).json({
-      message: "Registration failed",
+      message: "Student registration failed",
       error: err.message,
     });
   }
 };
 
-// Student Login
+// ----------------------- Student Login -----------------------
 const loginStudent = async (req, res) => {
   try {
-    // Find student by email
     const student = await Student.findOne({ email: req.body.email });
 
     if (!student) {
       return res.status(404).json({ message: "Student not found" });
     }
 
-    // Check password
     const validPassword = await bcrypt.compare(
       req.body.password,
       student.password
@@ -115,7 +126,6 @@ const loginStudent = async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    // Return response (excluding password)
     const studentData = student.toObject();
     delete studentData.password;
 
@@ -124,17 +134,18 @@ const loginStudent = async (req, res) => {
       student: studentData,
     });
   } catch (err) {
-    console.error("Login error:", err);
+    console.error("Student Login error:", err);
     res.status(500).json({
-      message: "Login failed",
+      message: "Student login failed",
       error: err.message,
     });
   }
 };
 
+// Export all functions
 module.exports = {
-  registerStudent,
-  loginStudent,
   registerAdmin,
   loginAdmin,
+  registerStudent,
+  loginStudent,
 };
