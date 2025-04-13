@@ -3,19 +3,28 @@ const sendMail = require("../utils/mailer");
 
 const addStudent = async (req, res) => {
   try {
+    const { name, email } = req.body;
+
+    // Check for duplicate email
+    const existingStudent = await Student.findOne({ email });
+    if (existingStudent) {
+      return res.status(400).json({ message: "Email already registered" });
+    }
+
+    // Save new student
     const student = new Student(req.body);
     await student.save();
 
-    // Sending mail after successful registration
+    // Send registration email
     await sendMail(
       email,
       "Registration Successful - Conv Portal",
-      `Hello ${student.name},\n\nWelcome to Conv Portal! Your registration was successful.\n\nThank you!`
+      `Hello ${name},\n\nWelcome to Conv Portal! Your registration was successful.\n\nThank you!`
     );
 
     res.status(201).json({ message: "Student Registered & Email Sent" });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ message: "Error adding student" });
   }
 };
