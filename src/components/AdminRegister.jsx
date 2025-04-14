@@ -1,6 +1,8 @@
-// src/components/AdminRegister.jsx
 import React, { useState } from "react";
 import axios from "axios";
+import Modal from "react-modal";
+
+Modal.setAppElement("#root");
 
 function AdminRegister() {
   const [form, setForm] = useState({
@@ -8,6 +10,8 @@ function AdminRegister() {
     email: "",
     password: "",
   });
+  const [modalIsOpen, setModalIsOpen] = useState(false);  // Track modal visibility
+  const [modalMessage, setModalMessage] = useState("");  // Track modal message
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -16,16 +20,25 @@ function AdminRegister() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/register", {
+      const res = await axios.post("http://localhost:5000/api/admin/register", {
         ...form,
         role: "admin",
       });
-      alert("Admin Registration Successful!");
+
+      // Open modal and set success message
+      setModalMessage(res.data.message);
+      setModalIsOpen(true);
+
       console.log(res.data);
     } catch (err) {
-      alert(err.response?.data?.msg || "Registration Failed!");
+      setModalMessage(err.response?.data?.msg || "Registration Failed!");
+      setModalIsOpen(true);
       console.error(err);
     }
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
   };
 
   return (
@@ -36,9 +49,7 @@ function AdminRegister() {
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-600">
-              Name
-            </label>
+            <label className="block text-sm font-medium text-gray-600">Name</label>
             <input
               type="text"
               name="name"
@@ -49,9 +60,7 @@ function AdminRegister() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-600">
-              Email
-            </label>
+            <label className="block text-sm font-medium text-gray-600">Email</label>
             <input
               type="email"
               name="email"
@@ -62,9 +71,7 @@ function AdminRegister() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-600">
-              Password
-            </label>
+            <label className="block text-sm font-medium text-gray-600">Password</label>
             <input
               type="password"
               name="password"
@@ -82,6 +89,26 @@ function AdminRegister() {
           </button>
         </form>
       </div>
+
+      {/* Toast-like modal for success or error messages */}
+      {modalIsOpen && (
+        <div
+        className="fixed top-0 right-0 m-3 p-3 bg-green-600 text-white rounded-lg shadow-lg"
+        style={{
+          zIndex: 9999, 
+          maxWidth: "250px", 
+          fontSize: "14px", 
+        }}
+        >
+          <div className="flex justify-between items-center">
+            <h3 className="font-semibold">Registration Status</h3>
+            <button onClick={closeModal} className="text-xl font-bold">
+              X
+            </button>
+          </div>
+          <p className="mt-2">{modalMessage}</p>
+        </div>
+      )}
     </div>
   );
 }

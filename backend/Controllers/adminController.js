@@ -2,11 +2,11 @@ const Admin = require("../models/Admin");
 const Student = require("../models/Student");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const sendMail = require("../utils/mailer"); // <-- Add this
+const sendMail = require("../utils/mailer");
 
 // Admin Registration
 exports.adminRegister = async (req, res) => {
-  const { email, password } = req.body;
+  const { name, email, password } = req.body;
 
   try {
     const existingAdmin = await Admin.findOne({ email });
@@ -16,16 +16,14 @@ exports.adminRegister = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newAdmin = new Admin({ email, password: hashedPassword });
+    const newAdmin = new Admin({ name, email, password: hashedPassword });
 
     await newAdmin.save();
 
-    // Send Email After Registration
     await sendMail(
       email,
       "Admin Registration Successful - Conv Portal",
-      `Hello Admin,\n\nYour registration on Conv Portal was successful.\n\nRegards,\nTeam`
+      `Hello ${name},\n\nYour registration on Conv Portal was successful.\n\nRegards,\nTeam`
     );
 
     res

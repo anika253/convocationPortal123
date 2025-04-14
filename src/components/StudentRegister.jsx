@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
+import Modal from "react-modal";
+
+Modal.setAppElement("#root");
 
 function StudentRegister() {
   const [form, setForm] = useState({
@@ -10,6 +13,8 @@ function StudentRegister() {
     department: "",
     registered: false,
   });
+  const [modalIsOpen, setModalIsOpen] = useState(false);  // Track modal visibility
+  const [modalMessage, setModalMessage] = useState("");  // Track modal message
 
   const departments = [
     "Electronics and Communication Department",
@@ -38,8 +43,13 @@ function StudentRegister() {
         ...form,
         role: "student",
       });
-      alert("Student Registration Successful!");
+
+      // Open modal and set success message
+      setModalMessage("Student Registration Successful! You can now log in.");
+      setModalIsOpen(true);
+
       console.log(res.data);
+
       setForm({
         name: "",
         email: "",
@@ -49,9 +59,14 @@ function StudentRegister() {
         registered: false,
       });
     } catch (err) {
+      setModalMessage(err.response?.data?.msg || "Registration Failed!");
+      setModalIsOpen(true);
       console.error(err);
-      alert(err.response?.data?.msg || "Registration Failed!");
     }
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
   };
 
   return (
@@ -152,6 +167,24 @@ function StudentRegister() {
           </button>
         </form>
       </div>
+      {modalIsOpen && (
+        <div
+          className="fixed top-0 right-0 m-3 p-3 bg-green-600 text-white rounded-lg shadow-lg"
+          style={{
+            zIndex: 9999, 
+            maxWidth: "250px", 
+            fontSize: "14px", 
+          }}
+        >
+          <div className="flex justify-between items-center">
+            <h3 className="font-semibold text-sm">Registration Status</h3>
+            <button onClick={closeModal} className="text-lg font-bold">
+              X
+            </button>
+          </div>
+          <p className="mt-2 text-xs">{modalMessage}</p>
+        </div>
+      )}
     </div>
   );
 }
