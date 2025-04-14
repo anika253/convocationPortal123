@@ -1,22 +1,13 @@
+// Routes/authRoutes.js
 const express = require("express");
-const {
-  registerAdmin,
-  loginAdmin,
-  registerStudent,
-  loginStudent,
-} = require("../Controllers/authController");
-
 const router = express.Router();
+const { loginStudent, loginAdmin } = require("../Controllers/authController");
 
-// Admin Routes
-router.post("/register/admin", (req, res) => {
-  console.log("Request body:", req.body); // Should log { email: "...", password: "..." }
-  registerAdmin(req, res);
+router.post("/login", (req, res) => {
+  const { role } = req.body;
+  if (role === "student") return loginStudent(req, res);
+  if (role === "admin") return loginAdmin(req, res);
+  return res.status(400).json({ message: "Invalid role" });
 });
-router.post("/login/admin", loginAdmin);
-
-// Student Routes
-router.post("/register/student", registerStudent);
-router.post("/login/student", loginStudent);
 
 module.exports = router;

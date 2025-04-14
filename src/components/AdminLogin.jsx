@@ -1,9 +1,12 @@
-// src/components/AdminLogin.jsx
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import AdminDashboard from "./dashboard/AdminDashboard";
 
 function AdminLogin() {
   const [form, setForm] = useState({ email: "", password: "" });
+  const [message, setMessage] = useState(null);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -16,15 +19,36 @@ function AdminLogin() {
         ...form,
         role: "admin",
       });
-      alert("Admin Login Successful!");
+
+      // On success, show success message and navigate
+      if (res.data === "Admin Login Successful") {
+        setMessage({ type: "success", text: "Admin Login Successful!" });
+        setTimeout(() => navigate("/AdminDashboard"), 1000); // Adjust to your admin dashboard route
+      }
     } catch (err) {
-      alert(err.response?.data?.msg || "Admin Login Failed!");
+      setMessage({
+        type: "error",
+        text: err.response?.data?.message || "Admin Login Failed!",
+      });
     }
   };
+
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-100 to-blue-100">
       <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
+        {message && (
+          <div
+            className={`mb-4 px-4 py-2 rounded-md text-sm ${
+              message.type === "success"
+                ? "bg-green-100 text-green-700 border border-green-300"
+                : "bg-red-100 text-red-700 border border-red-300"
+            }`}
+          >
+            {message.text}
+          </div>
+        )}
         <h2 className="text-2xl font-bold text-center mb-6 text-gray-700">
           Admin Login
         </h2>

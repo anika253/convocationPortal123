@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function StudentLogin() {
   const [form, setForm] = useState({ email: "", password: "" });
+  const [message, setMessage] = useState(null);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -11,20 +14,41 @@ function StudentLogin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", {
+      const response = await axios.post("http://localhost:5000/api/auth/login", {
         ...form,
         role: "student",
       });
-      alert("Student Login Successful!");
+
+      // Ensure that you're checking the response correctly
+      if (response.data.message === "Login successful") {
+        setMessage({ type: "success", text: "Student Login Successful!" });
+        setTimeout(() => navigate("/home"), 1000);
+      }
     } catch (err) {
-      alert(err.response?.data?.msg || "Student Login Failed!");
+      setMessage({
+        type: "error",
+        text: err.response?.data?.message || "Student Login Failed!",
+      });
     }
   };
 
   return (
     <div className="flex items-center justify-center h-screen bg-gradient-to-br from-blue-50 to-blue-200">
-      <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center mb-6 text-blue-700">Student Login</h2>
+      <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md relative">
+        {message && (
+          <div
+            className={`absolute top-4 left-4 px-4 py-2 rounded-md text-sm ${
+              message.type === "success"
+                ? "bg-green-100 text-green-700 border border-green-300"
+                : "bg-red-100 text-red-700 border border-red-300"
+            }`}
+          >
+            {message.text}
+          </div>
+        )}
+        <h2 className="text-2xl font-bold text-center mb-6 text-blue-700">
+          Student Login
+        </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block mb-1 text-sm font-medium">Email</label>

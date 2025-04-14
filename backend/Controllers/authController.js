@@ -12,12 +12,13 @@ const registerAdmin = async (req, res) => {
         .json({ message: "Email and password are required!" });
     }
 
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    // Store the password in plain text (no hashing)
     const newAdmin = new Admin({
       email: req.body.email,
-      password: hashedPassword,
+      password: req.body.password, // Store password as plain text
     });
 
+    // Save the admin to the database
     await newAdmin.save();
     res.status(201).json({ message: "Admin registered successfully!" });
   } catch (err) {
@@ -29,15 +30,22 @@ const registerAdmin = async (req, res) => {
   }
 };
 
+
 // Admin Login
 const loginAdmin = async (req, res) => {
   try {
+    // Find admin by email
     const admin = await Admin.findOne({ email: req.body.email });
+
+    // If no admin found
     if (!admin) return res.status(400).json("Admin Not Found");
 
-    const validPass = await bcrypt.compare(req.body.password, admin.password);
-    if (!validPass) return res.status(400).json("Invalid Credentials");
+    // Directly compare plain-text passwords
+    if (req.body.password !== admin.password) {
+      return res.status(400).json("Invalid Credentials");
+    }
 
+    // Success response
     res.status(200).json("Admin Login Successful");
   } catch (err) {
     res.status(500).json(err);
@@ -46,7 +54,7 @@ const loginAdmin = async (req, res) => {
 
 // Student Register
 
-// Student Register
+
 const registerStudent = async (req, res) => {
   try {
     // Check if student already exists
@@ -97,6 +105,7 @@ const registerStudent = async (req, res) => {
 };
 
 // Student Login
+// Student Login
 const loginStudent = async (req, res) => {
   try {
     // Find student by email
@@ -105,13 +114,8 @@ const loginStudent = async (req, res) => {
     if (!student) {
       return res.status(404).json({ message: "Student not found" });
     }
-
-    // Check password
-    const validPassword = await bcrypt.compare(
-      req.body.password,
-      student.password
-    );
-    if (!validPassword) {
+    // Check password - you can modify this part later when you implement hashing
+    if (req.body.password !== student.password) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 

@@ -5,6 +5,7 @@ const cors = require("cors");
 
 const studentRoutes = require("./Routes/studentRoutes");
 const adminRoutes = require("./Routes/adminRoutes"); // <-- Added
+const authRoutes = require("./Routes/authRoutes");
 
 dotenv.config();
 
@@ -14,7 +15,7 @@ app.use(express.json());
 
 app.use("/api/student", studentRoutes);
 app.use("/api/admin", adminRoutes); // <-- Added
-
+app.use("/api/auth", authRoutes);
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {

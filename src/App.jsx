@@ -7,6 +7,7 @@ import AdminLogin from "./components/AdminLogin";
 import StudentLogin from "./components/StudentLogin";
 import AdminRegister from "./components/AdminRegister";
 import StudentRegister from "./components/StudentRegister";
+import StudentHomePage from "./components/dashboard/HomePage";
 
 function App() {
   return (
@@ -29,6 +30,9 @@ function App() {
 
         {/* Student Register */}
         <Route path="/register/student" element={<StudentRegister />} />
+          
+          {/* Student Home Page */}
+        <Route path="/home" element={<StudentHomePage />} />
       </Routes>
     </BrowserRouter>
   );
