@@ -18,9 +18,11 @@ function StudentLogin() {
         ...form,
         role: "student",
       });
-
-      // Ensure that you're checking the response correctly
       if (response.data.message === "Login successful") {
+        // Store email and name in localStorage
+        localStorage.setItem("studentEmail", response.data.student.email);
+        localStorage.setItem("studentName", response.data.student.name);
+
         setMessage({ type: "success", text: "Student Login Successful!" });
         setTimeout(() => navigate("/home"), 1000);
       }

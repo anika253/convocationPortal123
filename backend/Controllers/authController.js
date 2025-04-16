@@ -105,7 +105,7 @@ const registerStudent = async (req, res) => {
 };
 
 // Student Login
-// Student Login
+
 const loginStudent = async (req, res) => {
   try {
     // Find student by email

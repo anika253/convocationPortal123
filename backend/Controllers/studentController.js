@@ -38,4 +38,19 @@ const getAllStudents = async (req, res) => {
   }
 };
 
-module.exports = { addStudent, getAllStudents };
+const getStudentByEmail = async (req, res) => {
+  try {
+    const { email } = req.params;
+    const student = await Student.findOne({ email });
+
+    if (!student) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+
+    res.status(200).json(student);
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching student" });
+  }
+};
+
+module.exports = { addStudent, getAllStudents , getStudentByEmail };
