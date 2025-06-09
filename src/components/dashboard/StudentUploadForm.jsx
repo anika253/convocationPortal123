@@ -1,4 +1,3 @@
-// src/components/dashboard/StudentUploadForm.jsx
 import React, { useState } from "react";
 import axios from "axios";
 import "./StudentUploadForm.css";
@@ -10,9 +9,15 @@ const StudentUploadForm = () => {
   const handleUpload = async (e) => {
     e.preventDefault();
 
+    const studentId = localStorage.getItem("studentId");
+    if (!studentId) {
+      setMessage("Student not logged in ❌");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("document", file);
-    formData.append("studentId", "demoStudent123"); // replace with real ID
+    formData.append("studentId", studentId); // ✅ use actual ID
 
     try {
       await axios.post("http://localhost:5000/api/docs/upload", formData);

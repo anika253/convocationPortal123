@@ -14,16 +14,25 @@ function StudentLogin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/login", {
-        ...form,
-        role: "student",
-      });
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/login",
+        {
+          ...form,
+          role: "student",
+        }
+      );
+
       if (response.data.message === "Login successful") {
-        // Store email and name in localStorage
-        localStorage.setItem("studentEmail", response.data.student.email);
-        localStorage.setItem("studentName", response.data.student.name);
+        const student = response.data.student;
+
+        // ✅ Store essential student info in localStorage
+        localStorage.setItem("studentId", student._id);
+        localStorage.setItem("studentEmail", student.email);
+        localStorage.setItem("studentName", student.name);
 
         setMessage({ type: "success", text: "Student Login Successful!" });
+
+        // Navigate to home after a short delay
         setTimeout(() => navigate("/home"), 1000);
       }
     } catch (err) {

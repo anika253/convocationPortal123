@@ -1,0 +1,74 @@
+/* AdminApprovalPanel.css */
+.approval-panel {
+  padding: 2rem;
+  max-width: 800px;
+  margin: auto;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.panel-heading {
+  text-align: center;
+  color: #333;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 0.5rem;
+}
+
+.no-docs {
+  text-align: center;
+  color: gray;
+  font-style: italic;
+}
+
+.doc-card {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 1.2rem;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.view-link {
+  display: inline-block;
+  margin: 0.5rem 0;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.view-link:hover {
+  text-decoration: underline;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+}
+
+.approve-btn,
+.reject-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.approve-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.reject-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.approve-btn:hover {
+  background-color: #218838;
+}
+
+.reject-btn:hover {
+  background-color: #c82333;
+}

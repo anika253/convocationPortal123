@@ -9,7 +9,7 @@ import AdminRegister from "./components/AdminRegister";
 import StudentRegister from "./components/StudentRegister";
 import StudentHomePage from "./components/dashboard/HomePage";
 import StudentUploadForm from "./components/dashboard/StudentUploadForm"; // ✅ NEW
-
+import AdminDashboard from "./components/dashboard/AdminDashboard";
 function App() {
   return (
     <BrowserRouter>
@@ -22,6 +22,7 @@ function App() {
         <Route path="/register/student" element={<StudentRegister />} />
         <Route path="/home" element={<StudentHomePage />} />
         <Route path="/documents" element={<StudentUploadForm />} />{" "}
+        <Route path="/AdminDashboard" element={<AdminDashboard />} />
         {/* ✅ NEW */}
       </Routes>
     </BrowserRouter>

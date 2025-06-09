@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import AdminDashboard from "./dashboard/AdminDashboard";
-
 function AdminLogin() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [message, setMessage] = useState(null);

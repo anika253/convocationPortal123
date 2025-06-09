@@ -1,20 +1,30 @@
-// src/components/dashboard/AdminApprovalPanel.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import "./AdminApprovalPanel.css"; // ✅ CSS is already linked
 
 const AdminApprovalPanel = () => {
   const [docs, setDocs] = useState([]);
 
   const fetchDocs = async () => {
-    const res = await axios.get("http://localhost:5000/api/docs/admin/pending");
-    setDocs(res.data);
+    try {
+      const res = await axios.get(
+        "http://localhost:5000/api/docs/admin/pending"
+      );
+      setDocs(res.data);
+    } catch (err) {
+      console.error("Error fetching documents:", err);
+    }
   };
 
   const updateStatus = async (id, status) => {
-    await axios.put(`http://localhost:5000/api/docs/admin/update/${id}`, {
-      status,
-    });
-    fetchDocs(); // refresh list
+    try {
+      await axios.put(`http://localhost:5000/api/docs/admin/update/${id}`, {
+        status,
+      });
+      fetchDocs(); // refresh list
+    } catch (err) {
+      console.error("Error updating status:", err);
+    }
   };
 
   useEffect(() => {
@@ -22,35 +32,43 @@ const AdminApprovalPanel = () => {
   }, []);
 
   return (
-    <div>
-      <h2>Pending Documents</h2>
+    <div className="approval-panel">
+      <h2 className="panel-heading">📄 Pending Documents</h2>
       {docs.length === 0 ? (
-        <p>No pending documents</p>
+        <p className="no-docs">No pending documents</p>
       ) : (
         docs.map((doc) => (
-          <div
-            key={doc._id}
-            style={{
-              border: "1px solid gray",
-              margin: "10px",
-              padding: "10px",
-            }}
-          >
-            <p>Student: {doc.studentId}</p>
+          <div key={doc._id} className="doc-card">
+            <p>
+              <strong>Student Name:</strong> {doc.studentId?.name || "N/A"}
+            </p>
+            <p>
+              <strong>Email:</strong> {doc.studentId?.email || "N/A"}
+            </p>
+
             <a
               href={`http://localhost:5000/${doc.filePath}`}
               target="_blank"
               rel="noreferrer"
+              className="view-link"
             >
-              View Document
+              🔍 View Document
             </a>
-            <br />
-            <button onClick={() => updateStatus(doc._id, "approved")}>
-              Approve
-            </button>
-            <button onClick={() => updateStatus(doc._id, "rejected")}>
-              Reject
-            </button>
+
+            <div className="button-group">
+              <button
+                className="approve-btn"
+                onClick={() => updateStatus(doc._id, "approved")}
+              >
+                ✅ Approve
+              </button>
+              <button
+                className="reject-btn"
+                onClick={() => updateStatus(doc._id, "rejected")}
+              >
+                ❌ Reject
+              </button>
+            </div>
           </div>
         ))
       )}
