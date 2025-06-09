@@ -30,6 +30,8 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api/student", studentRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/docs", documentRoutes);
+app.use("/uploads", express.static("uploads"));
 
 // New route for document uploads
 app.use("/api/docs", documentRoutes);

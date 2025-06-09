@@ -45,8 +45,14 @@ exports.uploadDocument = (req, res) => {
     }
 
     try {
+      const { studentId } = req.body;
+
+      if (!studentId) {
+        return res.status(400).json({ error: "Student ID is required" });
+      }
+
       const doc = new Document({
-        studentId: req.body.studentId || "demoStudent", // Replace with real auth user later
+        studentId, // Should be sent as ObjectId string from frontend
         filePath: req.file.path,
         filename: req.file.filename,
         status: "pending",
@@ -54,22 +60,27 @@ exports.uploadDocument = (req, res) => {
       });
 
       await doc.save();
+
       res
         .status(200)
         .json({ message: "Document uploaded successfully", document: doc });
     } catch (error) {
-      console.error(error);
+      console.error("Upload Error:", error);
       res.status(500).json({ error: "Failed to upload document" });
     }
   });
 };
 
-// Get all pending documents
+// Get all pending documents (admin)
 exports.getPendingDocuments = async (req, res) => {
   try {
-    const docs = await Document.find({ status: "pending" });
+    const docs = await Document.find({ status: "pending" }).populate(
+      "studentId",
+      "name email"
+    );
     res.json(docs);
   } catch (error) {
+    console.error("Fetch Error:", error);
     res.status(500).json({ error: "Failed to fetch documents" });
   }
 };
@@ -77,10 +88,17 @@ exports.getPendingDocuments = async (req, res) => {
 // Update document status (approve/reject)
 exports.updateDocumentStatus = async (req, res) => {
   const { status } = req.body;
+  const { id } = req.params;
+
+  if (!["approved", "rejected"].includes(status)) {
+    return res.status(400).json({ error: "Invalid status value" });
+  }
+
   try {
-    await Document.findByIdAndUpdate(req.params.id, { status });
+    await Document.findByIdAndUpdate(id, { status });
     res.json({ message: `Document status updated to ${status}` });
   } catch (error) {
+    console.error("Update Error:", error);
     res.status(500).json({ error: "Failed to update document status" });
   }
 };
