@@ -1,6 +1,5 @@
 const Admin = require("../models/Admin");
 const Student = require("../models/Student");
-const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const sendMail = require("../utils/mailer");
 
@@ -15,8 +14,8 @@ exports.adminRegister = async (req, res) => {
       return res.status(400).json({ message: "Admin already exists" });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newAdmin = new Admin({ name, email, password: hashedPassword });
+    // Saving plain-text password (FOR TESTING ONLY — REMOVE in PRODUCTION)
+    const newAdmin = new Admin({ name, email, password });
 
     await newAdmin.save();
 
@@ -35,7 +34,7 @@ exports.adminRegister = async (req, res) => {
   }
 };
 
-// Admin Login
+// Admin Login (WITHOUT bcrypt, for testing only)
 exports.adminLogin = async (req, res) => {
   const { email, password } = req.body;
 
@@ -46,15 +45,14 @@ exports.adminLogin = async (req, res) => {
       return res.status(404).json({ message: "Admin not found" });
     }
 
-    const isMatch = await bcrypt.compare(password, admin.password);
-
-    if (!isMatch) {
+    // Plain text password comparison
+    if (password !== admin.password) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
     const token = jwt.sign({ id: admin._id }, "secretKey", { expiresIn: "1h" });
 
-    res.status(200).json({ token });
+    res.status(200).json({ message: "Admin Login Successful", token });
   } catch (error) {
     res.status(500).json({ message: "Server Error" });
   }
