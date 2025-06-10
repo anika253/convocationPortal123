@@ -31,7 +31,7 @@ const StudentUploadForm = () => {
   return (
     <div className="upload-container">
       <div className="upload-box">
-        <h2 className="upload-title">Upload Document</h2>
+        <h2 className="upload-title">Upload Documents</h2>
         <form onSubmit={handleUpload} className="upload-form">
           <input
             type="file"
