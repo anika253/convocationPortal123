@@ -1,11 +1,14 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom"; // ✅ import Link
+import { Link } from "react-router-dom";
+import axios from "axios";
 
 const StudentHomePage = () => {
   const [studentName, setStudentName] = useState("");
   const [studentEmail, setStudentEmail] = useState("");
   const [loading, setLoading] = useState(true);
+  const [documents, setDocuments] = useState([]);
+  const [paymentStatus, setPaymentStatus] = useState("pending"); // 👈 default
 
   useEffect(() => {
     const email = localStorage.getItem("studentEmail");
@@ -14,12 +17,34 @@ const StudentHomePage = () => {
     if (email && name) {
       setStudentEmail(email);
       setStudentName(name);
+      fetchDocuments(email);
+      // Optional: fetch payment status from backend here
     } else {
       console.error("Student data not found in localStorage");
+      setLoading(false);
     }
-
-    setLoading(false);
   }, []);
+
+  const fetchDocuments = async (email) => {
+    try {
+      const res = await axios.get(
+        `http://localhost:5000/api/docs/student/${email}`
+      );
+      setDocuments(res.data);
+    } catch (error) {
+      console.error("Error fetching student documents:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handlePayment = () => {
+    // Simulated payment
+    alert("Redirecting to payment gateway...");
+    // Simulate payment success
+    setPaymentStatus("completed");
+    // Optional: Update payment status in backend
+  };
 
   if (loading) {
     return (
@@ -42,12 +67,11 @@ const StudentHomePage = () => {
             Dashboard
           </a>
           <a href="#" className="hover:text-blue-600">
-            Application
+            Payment
           </a>
           <Link to="/documents" className="hover:text-blue-600">
             Documents
-          </Link>{" "}
-          {/* ✅ fixed */}
+          </Link>
           <a href="#" className="hover:text-blue-600">
             Instructions
           </a>
@@ -60,32 +84,68 @@ const StudentHomePage = () => {
       {/* Main Content */}
       <main className="flex-1 p-8">
         <header className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-800">
-            Welcome, {studentName} 👋
-          </h1>
+          <h1 className="text-3xl font-bold text-gray-800">Welcome! 👋</h1>
           <p className="text-gray-500 mt-1">
             Here’s your convocation status and information.
           </p>
         </header>
 
         <div className="grid md:grid-cols-3 gap-6">
-          {/* Application Status */}
+          {/* Payment Status */}
           <div className="bg-white rounded-xl shadow p-5">
-            <h2 className="text-xl font-semibold mb-2">Application Status</h2>
-            <p className="text-gray-600">
-              Your application is{" "}
-              <span className="text-green-600 font-medium">Approved</span>.
+            <h2 className="text-xl font-semibold mb-2">Payment Status</h2>
+            <p className="text-gray-600 mb-3">
+              Your payment is{" "}
+              <span
+                className={`font-medium ${
+                  paymentStatus === "completed"
+                    ? "text-green-600"
+                    : "text-yellow-600"
+                }`}
+              >
+                {paymentStatus === "completed" ? "Completed" : "Pending"}
+              </span>
+              .
             </p>
+            {paymentStatus !== "completed" && (
+              <button
+                onClick={handlePayment}
+                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+              >
+                Make Payment
+              </button>
+            )}
           </div>
 
           {/* Documents */}
           <div className="bg-white rounded-xl shadow p-5">
             <h2 className="text-xl font-semibold mb-2">Documents</h2>
-            <ul className="list-disc list-inside text-gray-600">
-              <li>Degree Certificate</li>
-              <li>Transcript</li>
-              <li>ID Proof</li>
-            </ul>
+            <p>
+              Upload the photo of your identity card by clicking on documents
+              option in side bar.
+            </p>
+            {documents.length === 0 ? (
+              <p className="text-gray-500 mt-2">No documents uploaded yet.</p>
+            ) : (
+              <ul className="list-disc list-inside text-gray-600 space-y-2 mt-2">
+                {documents.map((doc) => (
+                  <li key={doc._id}>
+                    📄 {doc.filename} –{" "}
+                    <span
+                      className={`font-medium ${
+                        doc.status === "approved"
+                          ? "text-green-600"
+                          : doc.status === "rejected"
+                          ? "text-red-600"
+                          : "text-yellow-600"
+                      }`}
+                    >
+                      {doc.status.charAt(0).toUpperCase() + doc.status.slice(1)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
 
           {/* Ceremony Details */}
