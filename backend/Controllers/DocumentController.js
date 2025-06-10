@@ -1,18 +1,23 @@
 const multer = require("multer");
 const path = require("path");
 const Document = require("../models/Document");
+const Student = require("../models/Student"); // ✅ needed for student-email-based query
 
-// Multer storage configuration
+// ======================
+// Multer Storage Config
+// ======================
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "uploads/"); // uploads folder in backend/
+    cb(null, "uploads/");
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)); // unique filename
+    cb(null, Date.now() + path.extname(file.originalname));
   },
 });
 
-// File type filter (PDF, JPG, JPEG, PNG only)
+// =====================
+// File Filter for Valid Types
+// =====================
 const fileFilter = (req, file, cb) => {
   const allowedTypes = /pdf|jpg|jpeg|png/;
   const extname = allowedTypes.test(
@@ -27,32 +32,37 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-// Set multer upload instance
+// =====================
+// Multer Upload Instance
+// =====================
 const upload = multer({
   storage,
   fileFilter,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB max size
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
 }).single("document");
 
-// Upload document controller using multer middleware
-exports.uploadDocument = (req, res) => {
+// =====================
+// Upload Document Controller
+// =====================
+const uploadDocument = (req, res) => {
   upload(req, res, async (err) => {
     if (err) {
       return res.status(400).json({ error: err.message });
     }
+
     if (!req.file) {
       return res.status(400).json({ error: "No file uploaded" });
     }
 
+    const { studentId } = req.body;
+
+    if (!studentId) {
+      return res.status(400).json({ error: "Student ID is required" });
+    }
+
     try {
-      const { studentId } = req.body;
-
-      if (!studentId) {
-        return res.status(400).json({ error: "Student ID is required" });
-      }
-
       const doc = new Document({
-        studentId, // Should be sent as ObjectId string from frontend
+        studentId,
         filePath: req.file.path,
         filename: req.file.filename,
         status: "pending",
@@ -61,9 +71,10 @@ exports.uploadDocument = (req, res) => {
 
       await doc.save();
 
-      res
-        .status(200)
-        .json({ message: "Document uploaded successfully", document: doc });
+      res.status(200).json({
+        message: "Document uploaded successfully",
+        document: doc,
+      });
     } catch (error) {
       console.error("Upload Error:", error);
       res.status(500).json({ error: "Failed to upload document" });
@@ -71,8 +82,10 @@ exports.uploadDocument = (req, res) => {
   });
 };
 
-// Get all pending documents (admin)
-exports.getPendingDocuments = async (req, res) => {
+// =====================
+// Get All Pending Documents (Admin)
+// =====================
+const getPendingDocuments = async (req, res) => {
   try {
     const docs = await Document.find({ status: "pending" }).populate(
       "studentId",
@@ -85,8 +98,10 @@ exports.getPendingDocuments = async (req, res) => {
   }
 };
 
-// Update document status (approve/reject)
-exports.updateDocumentStatus = async (req, res) => {
+// =====================
+// Update Status (Admin Approve/Reject)
+// =====================
+const updateDocumentStatus = async (req, res) => {
   const { status } = req.body;
   const { id } = req.params;
 
@@ -101,4 +116,34 @@ exports.updateDocumentStatus = async (req, res) => {
     console.error("Update Error:", error);
     res.status(500).json({ error: "Failed to update document status" });
   }
+};
+
+// =====================
+// ✅ New: Get Student Documents by Email
+// =====================
+const getStudentDocuments = async (req, res) => {
+  const { email } = req.params;
+
+  try {
+    const student = await Student.findOne({ email });
+    if (!student) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+
+    const documents = await Document.find({ studentId: student._id });
+    res.json(documents);
+  } catch (error) {
+    console.error("Get Student Docs Error:", error);
+    res.status(500).json({ error: "Failed to fetch student documents" });
+  }
+};
+
+// =====================
+// Export All Controllers
+// =====================
+module.exports = {
+  uploadDocument,
+  getPendingDocuments,
+  updateDocumentStatus,
+  getStudentDocuments, // ✅ export this new one
 };
