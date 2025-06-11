@@ -89,7 +89,7 @@ const getPendingDocuments = async (req, res) => {
   try {
     const docs = await Document.find({ status: "pending" }).populate(
       "studentId",
-      "name email"
+      "name email rollno department"
     );
     res.json(docs);
   } catch (error) {
