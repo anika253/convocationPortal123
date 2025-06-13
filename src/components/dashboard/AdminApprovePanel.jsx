@@ -39,6 +39,7 @@ const AdminApprovalPanel = () => {
       Email: doc.studentId?.email || "N/A",
       RollNo: doc.studentId?.rollno || "N/A",
       Department: doc.studentId?.department || "N/A",
+      AttendanceMode: doc.studentId?.attendanceMode || "N/A", // ✅ new
       Status: doc.status || "pending",
     }));
 
@@ -119,6 +120,10 @@ const AdminApprovalPanel = () => {
             </p>
             <p>
               <strong>Department:</strong> {doc.studentId?.department || "N/A"}
+            </p>
+            <p>
+              <strong>Attendance Mode:</strong>{" "}
+              {doc.studentId?.attendanceMode || "N/A"}
             </p>
 
             <a

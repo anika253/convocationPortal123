@@ -8,7 +8,8 @@ const StudentHomePage = () => {
   const [studentEmail, setStudentEmail] = useState("");
   const [loading, setLoading] = useState(true);
   const [documents, setDocuments] = useState([]);
-  const [paymentStatus, setPaymentStatus] = useState("pending"); // 👈 default
+  const [paymentStatus, setPaymentStatus] = useState("pending");
+  const [attendanceMode, setAttendanceMode] = useState(""); // 👈 Attendance mode
 
   useEffect(() => {
     const email = localStorage.getItem("studentEmail");
@@ -18,7 +19,7 @@ const StudentHomePage = () => {
       setStudentEmail(email);
       setStudentName(name);
       fetchDocuments(email);
-      // Optional: fetch payment status from backend here
+      fetchStudent(email); // 👈 fetch attendance mode too
     } else {
       console.error("Student data not found in localStorage");
       setLoading(false);
@@ -38,12 +39,38 @@ const StudentHomePage = () => {
     }
   };
 
+  const fetchStudent = async (email) => {
+    try {
+      const res = await axios.get(`http://localhost:5000/api/student/${email}`);
+      const student = res.data;
+      setAttendanceMode(student.attendanceMode || "");
+      localStorage.setItem("studentId", student._id);
+    } catch (error) {
+      console.error("Error fetching student info:", error);
+    }
+  };
+
   const handlePayment = () => {
-    // Simulated payment
     alert("Redirecting to payment gateway...");
-    // Simulate payment success
     setPaymentStatus("completed");
-    // Optional: Update payment status in backend
+  };
+
+  const handleAttendanceChange = async (e) => {
+    const selectedMode = e.target.value;
+    setAttendanceMode(selectedMode);
+    try {
+      const studentId = localStorage.getItem("studentId");
+      await axios.put(
+        `http://localhost:5000/api/student/attendance/${studentId}`,
+        {
+          mode: selectedMode,
+        }
+      );
+      alert("Your preference has been saved.");
+    } catch (error) {
+      console.error("Failed to update attendance mode:", error);
+      alert("Failed to save preference.");
+    }
   };
 
   if (loading) {
@@ -157,6 +184,23 @@ const StudentHomePage = () => {
               Venue: University Hall
             </p>
           </div>
+        </div>
+
+        {/* Attendance Preference */}
+        <div className="mt-10 bg-white rounded-xl shadow p-6">
+          <h2 className="text-xl font-bold mb-4">Attendance Preference</h2>
+          <p className="text-gray-700 mb-2">
+            How would you like to attend the convocation ceremony?
+          </p>
+          <select
+            value={attendanceMode}
+            onChange={handleAttendanceChange}
+            className="border border-gray-300 rounded px-4 py-2"
+          >
+            <option value="">-- Select Mode --</option>
+            <option value="online">Online</option>
+            <option value="physical">Physical</option>
+          </select>
         </div>
 
         <div className="mt-10 bg-white rounded-xl shadow p-6">
