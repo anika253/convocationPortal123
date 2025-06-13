@@ -1,9 +1,10 @@
 const Student = require("../models/Student");
 const sendMail = require("../utils/mailer");
 
+// Add a new student
 const addStudent = async (req, res) => {
   try {
-    const { name, email } = req.body;
+    const { name, email, attendanceMode } = req.body;
 
     // Check for duplicate email
     const existingStudent = await Student.findOne({ email });
@@ -29,6 +30,7 @@ const addStudent = async (req, res) => {
   }
 };
 
+// Get all students
 const getAllStudents = async (req, res) => {
   try {
     const students = await Student.find();
@@ -38,6 +40,7 @@ const getAllStudents = async (req, res) => {
   }
 };
 
+// Get a student by email
 const getStudentByEmail = async (req, res) => {
   try {
     const { email } = req.params;
@@ -53,4 +56,38 @@ const getStudentByEmail = async (req, res) => {
   }
 };
 
-module.exports = { addStudent, getAllStudents , getStudentByEmail };
+// ✅ Update attendance mode (Online / Physical)
+const updateAttendanceMode = async (req, res) => {
+  try {
+    const { studentId } = req.params;
+    const { mode } = req.body;
+
+    if (!["online", "physical"].includes(mode)) {
+      return res.status(400).json({ message: "Invalid attendance mode" });
+    }
+
+    const updatedStudent = await Student.findByIdAndUpdate(
+      studentId,
+      { attendanceMode: mode },
+      { new: true }
+    );
+
+    if (!updatedStudent) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+
+    res
+      .status(200)
+      .json({ message: "Attendance mode updated", student: updatedStudent });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error updating attendance mode" });
+  }
+};
+
+module.exports = {
+  addStudent,
+  getAllStudents,
+  getStudentByEmail,
+  updateAttendanceMode,
+};
