@@ -1,16 +1,18 @@
 import React from "react";
 import AdminApprovalPanel from "./AdminApprovePanel";
+import "./AdminDashboard.css"; // 👈 Import the CSS file
 
 const AdminDashboard = () => {
   return (
-    <div style={{ padding: "2rem" }}>
-      <h1>Welcome Admin!</h1>
-      <p>This is your dashboard.</p>
+    <div className="admin-dashboard">
+      <div className="welcome-banner">
+        <h1>Welcome Admin! 👋</h1>
+        <p>This is your dashboard where you can manage document approvals.</p>
+      </div>
 
-      {/* Insert the document approval panel here */}
       <AdminApprovalPanel />
 
-      {/* Add other dashboard widgets/components below */}
+      {/* Future dashboard widgets/components can go here */}
     </div>
   );
 };

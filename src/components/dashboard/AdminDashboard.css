@@ -1,0 +1,29 @@
+.admin-dashboard {
+  padding: 2rem 1rem;
+  max-width: 1200px;
+  margin: auto;
+  font-family: "Segoe UI", sans-serif;
+  color: #2c3e50;
+  background-color: #f5f7fa;
+  min-height: 100vh;
+}
+
+.welcome-banner {
+  background: linear-gradient(135deg, #3498db, #6dd5fa);
+  padding: 2rem;
+  border-radius: 12px;
+  color: white;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.welcome-banner h1 {
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.welcome-banner p {
+  font-size: 1.2rem;
+  opacity: 0.95;
+}

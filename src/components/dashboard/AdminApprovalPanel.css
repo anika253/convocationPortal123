@@ -1,73 +1,98 @@
-/* AdminApprovalPanel.css */
-
 .approval-panel {
-  padding: 2rem;
-  max-width: 900px;
+  padding: 2rem 1rem;
+  max-width: 1100px;
   margin: auto;
   font-family: "Segoe UI", sans-serif;
+  color: #2c3e50;
 }
 
 .panel-heading {
   text-align: center;
-  color: #333;
-  margin-bottom: 1.5rem;
-  font-size: 1.8rem;
-  border-bottom: 2px solid #ddd;
-  padding-bottom: 0.5rem;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #34495e;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.panel-heading::after {
+  content: "";
+  display: block;
+  width: 80px;
+  height: 3px;
+  background-color: #3498db;
+  margin: 0.5rem auto 0;
+  border-radius: 5px;
 }
 
 .filters {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-  margin-bottom: 1.5rem;
   justify-content: center;
+  margin-bottom: 2rem;
 }
 
 .filters input {
-  padding: 0.6rem 1rem;
+  padding: 0.75rem 1.25rem;
   border: 1px solid #ccc;
-  border-radius: 8px;
-  min-width: 200px;
+  border-radius: 10px;
   font-size: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: border 0.2s ease;
+}
+
+.filters input:focus {
+  border-color: #3498db;
+  outline: none;
 }
 
 .export-btn {
-  padding: 0.6rem 1.2rem;
-  background-color: #007bff;
+  background-color: #3498db;
   color: white;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
-  font-weight: bold;
   transition: background-color 0.3s ease;
 }
 
 .export-btn:hover {
-  background-color: #0056b3;
+  background-color: #2980b9;
 }
 
 .no-docs {
   text-align: center;
-  color: gray;
+  color: #7f8c8d;
   font-style: italic;
+  font-size: 1.1rem;
 }
 
 .doc-card {
-  border: 1px solid #ccc;
-  padding: 1rem;
-  border-radius: 10px;
-  margin-bottom: 1.2rem;
-  background-color: #f9f9f9;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease;
+}
+
+.doc-card:hover {
+  transform: translateY(-3px);
+}
+
+.doc-card p {
+  margin: 0.4rem 0;
+  line-height: 1.5;
 }
 
 .view-link {
   display: inline-block;
-  margin: 0.5rem 0;
-  color: #007bff;
+  margin-top: 1rem;
+  color: #3498db;
+  font-weight: 600;
   text-decoration: none;
-  font-weight: bold;
 }
 
 .view-link:hover {
@@ -77,12 +102,15 @@
 .button-group {
   display: flex;
   gap: 1rem;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
 }
 
 .approve-btn,
 .reject-btn {
-  padding: 0.5rem 1rem;
+  flex: 1;
+  min-width: 120px;
+  padding: 0.6rem 1rem;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -91,19 +119,19 @@
 }
 
 .approve-btn {
-  background-color: #28a745;
+  background-color: #2ecc71;
   color: white;
 }
 
 .reject-btn {
-  background-color: #dc3545;
+  background-color: #e74c3c;
   color: white;
 }
 
 .approve-btn:hover {
-  background-color: #218838;
+  background-color: #27ae60;
 }
 
 .reject-btn:hover {
-  background-color: #c82333;
+  background-color: #c0392b;
 }
