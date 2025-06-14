@@ -10,7 +10,7 @@ const AdminApprovalPanel = () => {
 
   const fetchStudents = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/student/");
+      const res = await axios.get("http://localhost:5000/api/admin/students/");
       const sorted = res.data.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
       );
@@ -20,14 +20,15 @@ const AdminApprovalPanel = () => {
     }
   };
 
-  const updateAttendanceMode = async (id, mode) => {
+  const updateStudentStatus = async (id, status) => {
     try {
-      await axios.put(`http://localhost:5000/api/student/attendance/${id}`, {
-        mode,
+      await axios.put(`http://localhost:5000/api/admin/status/${id}`, {
+        status,
+        reviewedBy: "Admin",
       });
-      fetchStudents(); // Refresh
+      fetchStudents();
     } catch (err) {
-      console.error("Error updating mode:", err);
+      console.error("Error updating status:", err);
     }
   };
 
@@ -38,7 +39,7 @@ const AdminApprovalPanel = () => {
       RollNo: s.rollno,
       Department: s.department,
       AttendanceMode: s.attendanceMode,
-      Registered: s.registered ? "Approved" : "Pending",
+      Status: s.status,
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(data);
@@ -63,6 +64,17 @@ const AdminApprovalPanel = () => {
       : true;
     return rollMatch && deptMatch;
   });
+
+  const getStatusBadge = (status) => {
+    switch (status) {
+      case "approved":
+        return <span className="status-approved">✅ Approved</span>;
+      case "rejected":
+        return <span className="status-rejected">❌ Rejected</span>;
+      default:
+        return <span className="status-pending">🕓 Pending</span>;
+    }
+  };
 
   return (
     <div className="approval-panel">
@@ -92,10 +104,7 @@ const AdminApprovalPanel = () => {
         <p className="no-docs">No student records found</p>
       ) : (
         filtered.map((s) => (
-          <div
-            key={s._id}
-            className={`doc-card ${s.registered ? "approved" : "pending"}`}
-          >
+          <div key={s._id} className="doc-card">
             <p>
               <strong>Name:</strong> {s.name}
             </p>
@@ -112,25 +121,39 @@ const AdminApprovalPanel = () => {
               <strong>Attendance Mode:</strong> {s.attendanceMode}
             </p>
             <p>
-              <strong>Status:</strong>{" "}
-              {s.registered ? (
-                <span className="status-approved">✅ Approved</span>
-              ) : (
-                <span className="status-pending">🕓 Pending</span>
-              )}
+              <strong>Status:</strong> {getStatusBadge(s.status)}
             </p>
 
-            {!s.registered && (
+            {s.documents?.length > 0 && (
+              <p>
+                <strong>Documents:</strong>{" "}
+                {s.documents.map((doc, index) => (
+                  <a
+                    key={index}
+                    className="view-doc-btn"
+                    href={`http://localhost:5000/${doc.filePath}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ display: "inline-block", marginRight: "8px" }}
+                  >
+                    📄 View Document {index + 1}
+                  </a>
+                ))}
+              </p>
+            )}
+
+            {/* ✅ Action Buttons for Pending Status */}
+            {s.status === "pending" && (
               <div className="button-group">
                 <button
                   className="approve-btn"
-                  onClick={() => updateAttendanceMode(s._id, "physical")}
+                  onClick={() => updateStudentStatus(s._id, "approved")}
                 >
                   ✅ Approve
                 </button>
                 <button
                   className="reject-btn"
-                  onClick={() => updateAttendanceMode(s._id, "online")}
+                  onClick={() => updateStudentStatus(s._id, "rejected")}
                 >
                   ❌ Reject
                 </button>

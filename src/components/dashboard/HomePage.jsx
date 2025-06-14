@@ -9,21 +9,31 @@ const StudentHomePage = () => {
   const [loading, setLoading] = useState(true);
   const [documents, setDocuments] = useState([]);
   const [paymentStatus, setPaymentStatus] = useState("pending");
-  const [attendanceMode, setAttendanceMode] = useState(""); // 👈 Attendance mode
+  const [attendanceMode, setAttendanceMode] = useState("");
 
   useEffect(() => {
     const email = localStorage.getItem("studentEmail");
     const name = localStorage.getItem("studentName");
 
-    if (email && name) {
-      setStudentEmail(email);
-      setStudentName(name);
-      fetchDocuments(email);
-      fetchStudent(email); // 👈 fetch attendance mode too
-    } else {
-      console.error("Student data not found in localStorage");
-      setLoading(false);
-    }
+    const fetchAllData = async () => {
+      try {
+        if (email && name) {
+          setStudentEmail(email);
+          setStudentName(name);
+
+          // Wait for both calls to complete before continuing
+          await Promise.all([fetchDocuments(email), fetchStudent(email)]);
+        } else {
+          console.error("Student data not found in localStorage");
+        }
+      } catch (error) {
+        console.error("Error loading student data:", error);
+      } finally {
+        setLoading(false); // ✅ only after both complete
+      }
+    };
+
+    fetchAllData();
   }, []);
 
   const fetchDocuments = async (email) => {
@@ -34,8 +44,6 @@ const StudentHomePage = () => {
       setDocuments(res.data);
     } catch (error) {
       console.error("Error fetching student documents:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -62,9 +70,7 @@ const StudentHomePage = () => {
       const studentId = localStorage.getItem("studentId");
       await axios.put(
         `http://localhost:5000/api/student/attendance/${studentId}`,
-        {
-          mode: selectedMode,
-        }
+        { mode: selectedMode }
       );
       alert("Your preference has been saved.");
     } catch (error) {
@@ -203,6 +209,7 @@ const StudentHomePage = () => {
           </select>
         </div>
 
+        {/* Instructions */}
         <div className="mt-10 bg-white rounded-xl shadow p-6">
           <h2 className="text-2xl font-bold mb-4">Important Instructions</h2>
           <ul className="list-disc list-inside text-gray-700 space-y-2">
