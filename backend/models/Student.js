@@ -9,14 +9,26 @@ const studentSchema = new mongoose.Schema(
     department: { type: String, required: true },
     registered: { type: Boolean, required: true },
 
-    // ✅ New Field for Attendance Mode
     attendanceMode: {
       type: String,
       enum: ["online", "physical"],
       default: "physical",
     },
+
+    // ✅ New field to track approval status
+    status: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: "pending",
+    },
+
+    // ✅ Optional field to track who approved or rejected it
+    reviewedBy: {
+      type: String, // e.g., Admin email or ID
+      default: null,
+    },
   },
-  { timestamps: true }
+  { timestamps: true } // Adds createdAt and updatedAt
 );
 
 module.exports = mongoose.model("Student", studentSchema);
