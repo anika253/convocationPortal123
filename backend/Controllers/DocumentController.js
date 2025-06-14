@@ -61,6 +61,7 @@ const uploadDocument = (req, res) => {
     }
 
     try {
+      // 1. Save document in Document collection
       const doc = new Document({
         studentId,
         filePath: req.file.path,
@@ -70,6 +71,11 @@ const uploadDocument = (req, res) => {
       });
 
       await doc.save();
+
+      // 2. ✅ Also update student model with documentPath
+      await Student.findByIdAndUpdate(studentId, {
+        documentPath: req.file.filename,
+      });
 
       res.status(200).json({
         message: "Document uploaded successfully",

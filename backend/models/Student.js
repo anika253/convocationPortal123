@@ -2,12 +2,41 @@ const mongoose = require("mongoose");
 
 const studentSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    rollno: { type: String, required: true, unique: true },
-    department: { type: String, required: true },
-    registered: { type: Boolean, required: true },
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
+
+    password: {
+      type: String,
+      required: true,
+    },
+
+    rollno: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+    },
+
+    department: {
+      type: String,
+      required: true,
+    },
+
+    registered: {
+      type: Boolean,
+      required: true,
+    },
 
     attendanceMode: {
       type: String,
@@ -15,20 +44,26 @@ const studentSchema = new mongoose.Schema(
       default: "physical",
     },
 
-    // ✅ New field to track approval status
+    // 🟡 Status for approval (used in admin panel)
     status: {
       type: String,
       enum: ["pending", "approved", "rejected"],
       default: "pending",
     },
+    documentPath: {
+      type: String,
+      default: "",
+    },
 
-    // ✅ Optional field to track who approved or rejected it
+    // 🟡 Document reviewer (optional)
     reviewedBy: {
-      type: String, // e.g., Admin email or ID
+      type: String, // Admin name or ID
       default: null,
     },
   },
-  { timestamps: true } // Adds createdAt and updatedAt
+  {
+    timestamps: true, // adds createdAt and updatedAt
+  }
 );
 
 module.exports = mongoose.model("Student", studentSchema);

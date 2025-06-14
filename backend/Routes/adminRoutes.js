@@ -6,6 +6,7 @@ const {
   adminRegister,
   getAllStudents,
   deleteStudent,
+  updateStudentStatus, // ✅ Import this
 } = require("../Controllers/adminController");
 
 // Admin Register API
@@ -19,5 +20,8 @@ router.get("/students", getAllStudents);
 
 // Delete Student API
 router.delete("/student/:id", deleteStudent);
+
+// ✅ Update Student Status API (approve/reject)
+router.put("/status/:studentId", updateStudentStatus);
 
 module.exports = router;
