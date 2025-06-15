@@ -52,14 +52,15 @@ A full-stack web application to simplify and streamline academic communication b
 | 💾 MongoDB Integration | - Store user profiles, document metadata, timestamps |
 
 
-🧪 Future Enhancements->
-🧠 AI Chatbot Integration using OpenAI/GPT API
-📦 Docker Support: Dockerfile and docker-compose setup
-🔍 Search and filter documents
-🔔 Notification system (upload alerts, feedback)
-📧 Email integration
-📊 Analytics dashboard for faculty
-🌐 Hosting on Render, Vercel, or AWS
+📌 **Future Enhancements**  
+- 🤖 AI Chatbot Integration using OpenAI/GPT API  
+- 📦 Docker Support: Dockerfile and docker-compose setup  
+- 🔍 Search and filter documents  
+- 🔔 Notification system (upload alerts, feedback)  
+- 📧 Email integration  
+- 📊 Analytics dashboard for faculty  
+- 🌐 Hosting on Render, Vercel, or AWS
+
 
 ### backend setup
 cd backend
