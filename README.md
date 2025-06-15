@@ -1,12 +1,66 @@
-# React + Vite
+# 🗂️ Convo Portal
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules plus is currently in production phase.
+A full-stack web application to simplify and streamline academic communication between students and faculty. It allows secure document sharing, organized dashboards, and planned chatbot integration — all within a responsive interface.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🌐 Live Demo
 
-## Expanding the ESLint configuration
+> _Coming Soon_ — Will be hosted on **Render** / **Vercel** with Docker support.
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🚀 Project Overview
+
+**Convo Portal** is built to improve student-faculty interactions by creating a one-stop portal for:
+- Document sharing (assignments, notices, etc.)
+- Role-based dashboards
+- File history and access logs
+- Upcoming: AI Chatbot support to guide users
+- Dockerized setup for seamless deployment and scalability
+
+---
+
+## 🛠️ Tech Stack
+
+### 🖥️ Frontend
+- React.js  
+- Tailwind CSS  
+- Axios  
+- React Router
+
+### 🔧 Backend
+- Node.js  
+- Express.js  
+- MongoDB (Mongoose ODM)
+
+### 🧰 Tools & Platforms
+- Git & GitHub  
+- Postman  
+- Docker (planned)  
+- Vercel / Render (for deployment)
+
+---
+
+## ✨ Features
+
+| Role      | Functionality |
+|-----------|---------------|
+| 👩‍🎓 Student | - Register/Login securely<br> - Upload documents (PDFs, assignments)<br> - View previously uploaded files<br> - Personalized dashboard |
+| 👨‍🏫 Faculty | - Access all student uploads<br> - Download files<br> - Manage and track student submissions |
+| 🔐 Authentication | - Session-based login system with form validation |
+| 🧠 AI Chatbot *(coming soon)* | - Guide users with queries related to document upload, deadlines, dashboard usage |
+| 🐳 Docker Support *(planned)* | - Full Docker containerization for production |
+| 💾 MongoDB Integration | - Store user profiles, document metadata, timestamps |
+
+---
+
+## 📸 Screenshots
+
+> Add these in a `/screenshots/` folder and replace links below.
+
+![Login Page](./screenshots/login.png)  
+![Student Dashboard](./screenshots/student-dashboard.png)  
+![Faculty Dashboard](./screenshots/faculty-dashboard.png)
+
+---
+
+
