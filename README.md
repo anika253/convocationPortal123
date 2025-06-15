@@ -63,12 +63,12 @@ A full-stack web application to simplify and streamline academic communication b
 
 
 ### backend setup
-cd backend
-npm install
-node server.js
+1.cd backend
+2.npm install
+3.node server.js
 ### frontend setup 
-cd my-vite-project
-npm install
-npm run dev
+1.cd my-vite-project
+2.npm install
+3.npm run dev
 
 
