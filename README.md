@@ -51,16 +51,13 @@ A full-stack web application to simplify and streamline academic communication b
 | 🐳 Docker Support *(planned)* | - Full Docker containerization for production |
 | 💾 MongoDB Integration | - Store user profiles, document metadata, timestamps |
 
----
-
-## 📸 Screenshots
-
-> Add these in a `/screenshots/` folder and replace links below.
-
-![Login Page](./screenshots/login.png)  
-![Student Dashboard](./screenshots/student-dashboard.png)  
-![Faculty Dashboard](./screenshots/faculty-dashboard.png)
-
----
+### backend setup
+cd backend
+npm install
+node server.js
+### frontend setup 
+cd my-vite-project
+npm install
+npm run dev
 
 
