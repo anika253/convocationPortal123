@@ -105,7 +105,7 @@ const getPendingDocuments = async (req, res) => {
 };
 
 // =====================
-// Update Status (Admin Approve/Reject)
+// ✅ Updated: Update Status (Admin Approve/Reject)
 // =====================
 const updateDocumentStatus = async (req, res) => {
   const { status } = req.body;
@@ -116,8 +116,23 @@ const updateDocumentStatus = async (req, res) => {
   }
 
   try {
-    await Document.findByIdAndUpdate(id, { status });
-    res.json({ message: `Document status updated to ${status}` });
+    const updatedDoc = await Document.findByIdAndUpdate(
+      id,
+      {
+        status,
+        reviewedBy: "Admin", // ✅ record reviewer
+      },
+      { new: true } // ✅ return the updated document
+    );
+
+    if (!updatedDoc) {
+      return res.status(404).json({ error: "Document not found" });
+    }
+
+    res.json({
+      message: `Document status updated to ${status}`,
+      document: updatedDoc,
+    });
   } catch (error) {
     console.error("Update Error:", error);
     res.status(500).json({ error: "Failed to update document status" });
@@ -125,7 +140,7 @@ const updateDocumentStatus = async (req, res) => {
 };
 
 // =====================
-// ✅ New: Get Student Documents by Email
+// Get Student Documents by Email
 // =====================
 const getStudentDocuments = async (req, res) => {
   const { email } = req.params;
@@ -150,6 +165,6 @@ const getStudentDocuments = async (req, res) => {
 module.exports = {
   uploadDocument,
   getPendingDocuments,
-  updateDocumentStatus,
-  getStudentDocuments, // ✅ export this new one
+  updateDocumentStatus, // ✅ updated
+  getStudentDocuments,
 };
