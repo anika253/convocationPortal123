@@ -1,7 +1,7 @@
 const multer = require("multer");
 const path = require("path");
 const Document = require("../models/Document");
-const Student = require("../models/Student"); // ✅ needed for student-email-based query
+const Student = require("../models/Student");
 
 // ======================
 // Multer Storage Config
@@ -61,7 +61,6 @@ const uploadDocument = (req, res) => {
     }
 
     try {
-      // 1. Save document in Document collection
       const doc = new Document({
         studentId,
         filePath: req.file.path,
@@ -72,7 +71,6 @@ const uploadDocument = (req, res) => {
 
       await doc.save();
 
-      // 2. ✅ Also update student model with documentPath
       await Student.findByIdAndUpdate(studentId, {
         documentPath: req.file.filename,
       });
@@ -105,7 +103,7 @@ const getPendingDocuments = async (req, res) => {
 };
 
 // =====================
-// ✅ Updated: Update Status (Admin Approve/Reject)
+// Update Document Status (Admin)
 // =====================
 const updateDocumentStatus = async (req, res) => {
   const { status } = req.body;
@@ -120,9 +118,9 @@ const updateDocumentStatus = async (req, res) => {
       id,
       {
         status,
-        reviewedBy: "Admin", // ✅ record reviewer
+        reviewedBy: "Admin",
       },
-      { new: true } // ✅ return the updated document
+      { new: true }
     );
 
     if (!updatedDoc) {
@@ -140,7 +138,7 @@ const updateDocumentStatus = async (req, res) => {
 };
 
 // =====================
-// Get Student Documents by Email
+// ✅ UPDATED: Get All Student Documents (by email)
 // =====================
 const getStudentDocuments = async (req, res) => {
   const { email } = req.params;
@@ -151,7 +149,11 @@ const getStudentDocuments = async (req, res) => {
       return res.status(404).json({ message: "Student not found" });
     }
 
-    const documents = await Document.find({ studentId: student._id });
+    // ✅ Return all documents for the student
+    const documents = await Document.find({ studentId: student._id }).sort({
+      uploadedAt: -1,
+    });
+
     res.json(documents);
   } catch (error) {
     console.error("Get Student Docs Error:", error);
@@ -165,6 +167,6 @@ const getStudentDocuments = async (req, res) => {
 module.exports = {
   uploadDocument,
   getPendingDocuments,
-  updateDocumentStatus, // ✅ updated
+  updateDocumentStatus,
   getStudentDocuments,
 };

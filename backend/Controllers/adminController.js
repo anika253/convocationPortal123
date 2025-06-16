@@ -1,6 +1,7 @@
 const Admin = require("../models/Admin");
 const Student = require("../models/Student");
 const sendMail = require("../utils/mailer");
+const Document = require("../models/Document");
 
 // ✅ Admin Registration
 exports.adminRegister = async (req, res) => {
@@ -49,20 +50,17 @@ exports.adminLogin = async (req, res) => {
   }
 };
 
-const Document = require("../models/Document"); // ✅ Make sure you import this
-
 exports.getAllStudents = async (req, res) => {
   try {
     const students = await Student.find().sort({ createdAt: -1 });
 
-    // For each student, find their document
+    // For each student, find all their documents
     const studentsWithDocs = await Promise.all(
       students.map(async (student) => {
-        const doc = await Document.findOne({ studentId: student._id });
-
+        const docs = await Document.find({ studentId: student._id });
         return {
           ...student._doc,
-          documentPath: doc?.filePath || null,
+          documents: docs || [],
         };
       })
     );
@@ -101,6 +99,15 @@ exports.updateStudentStatus = async (req, res) => {
     student.reviewedBy = reviewedBy || "Admin";
 
     await student.save();
+
+    // Update all documents associated with this student
+    await Document.updateMany(
+      { studentId: studentId },
+      { 
+        status: status,
+        reviewedBy: reviewedBy || "Admin"
+      }
+    );
 
     res.status(200).json({
       message: `Student status updated to ${status}`,

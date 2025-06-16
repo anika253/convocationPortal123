@@ -32,6 +32,17 @@ const AdminApprovalPanel = () => {
     }
   };
 
+  const updateDocumentStatus = async (docId, status) => {
+    try {
+      await axios.put(`http://localhost:5000/api/docs/admin/update/${docId}`, {
+        status,
+      });
+      fetchStudents();
+    } catch (err) {
+      console.error("Error updating document status:", err);
+    }
+  };
+
   const exportToExcel = () => {
     const data = students.map((s) => ({
       Name: s.name,
@@ -125,21 +136,42 @@ const AdminApprovalPanel = () => {
             </p>
 
             {s.documents?.length > 0 && (
-              <p>
+              <div>
                 <strong>Documents:</strong>{" "}
                 {s.documents.map((doc, index) => (
-                  <a
-                    key={index}
-                    className="view-doc-btn"
-                    href={`http://localhost:5000/${doc.filePath}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ display: "inline-block", marginRight: "8px" }}
-                  >
-                    📄 View Document {index + 1}
-                  </a>
+                  <div key={doc._id} style={{ marginBottom: "8px" }}>
+                    <a
+                      className="view-doc-btn"
+                      href={`http://localhost:5000/${doc.filePath}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ display: "inline-block", marginRight: "8px" }}
+                    >
+                      📄 View Document {index + 1}
+                    </a>
+                    <span style={{ marginRight: "8px" }}>
+                      Status: {doc.status.charAt(0).toUpperCase() + doc.status.slice(1)}
+                    </span>
+                    {doc.status === "pending" && (
+                      <>
+                        <button
+                          className="approve-btn"
+                          onClick={() => updateDocumentStatus(doc._id, "approved")}
+                          style={{ marginRight: "4px" }}
+                        >
+                          ✅ Approve
+                        </button>
+                        <button
+                          className="reject-btn"
+                          onClick={() => updateDocumentStatus(doc._id, "rejected")}
+                        >
+                          ❌ Reject
+                        </button>
+                      </>
+                    )}
+                  </div>
                 ))}
-              </p>
+              </div>
             )}
 
             {/* ✅ Action Buttons for Pending Status */}

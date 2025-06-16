@@ -114,21 +114,31 @@ const updateStudentStatus = async (req, res) => {
   }
 };
 
-// ✅ Update attendance mode (optional)
+// ✅ Update attendance mode
 const updateAttendanceMode = async (req, res) => {
   try {
     const { studentId } = req.params;
-    const { attendanceMode } = req.body;
+    const { mode } = req.body;
+
+    if (!["online", "physical"].includes(mode)) {
+      return res.status(400).json({ message: "Invalid attendance mode" });
+    }
 
     const student = await Student.findById(studentId);
-    if (!student) return res.status(404).json({ message: "Student not found" });
+    if (!student) {
+      return res.status(404).json({ message: "Student not found" });
+    }
 
-    student.attendanceMode = attendanceMode;
+    student.attendanceMode = mode;
     await student.save();
 
-    res.status(200).json({ message: "Attendance mode updated", student });
-  } catch (err) {
-    res.status(500).json({ message: "Error updating attendance mode" });
+    res.status(200).json({
+      message: "Attendance mode updated successfully",
+      student
+    });
+  } catch (error) {
+    console.error("Error updating attendance mode:", error);
+    res.status(500).json({ message: "Failed to update attendance mode" });
   }
 };
 

@@ -20,8 +20,6 @@ const StudentHomePage = () => {
         if (email && name) {
           setStudentEmail(email);
           setStudentName(name);
-
-          // Wait for both calls to complete before continuing
           await Promise.all([fetchDocuments(email), fetchStudent(email)]);
         } else {
           console.error("Student data not found in localStorage");
@@ -29,7 +27,7 @@ const StudentHomePage = () => {
       } catch (error) {
         console.error("Error loading student data:", error);
       } finally {
-        setLoading(false); // ✅ only after both complete
+        setLoading(false);
       }
     };
 
@@ -41,7 +39,7 @@ const StudentHomePage = () => {
       const res = await axios.get(
         `http://localhost:5000/api/docs/student/${email}`
       );
-      setDocuments(res.data);
+      setDocuments(res.data); // ✅ Now handles multiple documents
     } catch (error) {
       console.error("Error fetching student documents:", error);
     }
@@ -65,17 +63,22 @@ const StudentHomePage = () => {
 
   const handleAttendanceChange = async (e) => {
     const selectedMode = e.target.value;
-    setAttendanceMode(selectedMode);
     try {
       const studentId = localStorage.getItem("studentId");
-      await axios.put(
+      const response = await axios.put(
         `http://localhost:5000/api/student/attendance/${studentId}`,
         { mode: selectedMode }
       );
-      alert("Your preference has been saved.");
+      
+      if (response.data.student) {
+        setAttendanceMode(response.data.student.attendanceMode);
+        alert("Your attendance preference has been saved successfully.");
+      }
     } catch (error) {
       console.error("Failed to update attendance mode:", error);
-      alert("Failed to save preference.");
+      alert("Failed to save attendance preference. Please try again.");
+      // Revert the select value to the previous state
+      e.target.value = attendanceMode;
     }
   };
 
@@ -96,21 +99,27 @@ const StudentHomePage = () => {
         </div>
         <hr className="mt-4 border-t border-gray-300" />
         <nav className="flex flex-col space-y-4 text-gray-700">
-          <a href="#" className="hover:text-blue-600">
+          <Link to="/" className="hover:text-blue-600">
             Dashboard
-          </a>
-          <a href="#" className="hover:text-blue-600">
+          </Link>
+          <Link to="/payment" className="hover:text-blue-600">
             Payment
-          </a>
+          </Link>
           <Link to="/documents" className="hover:text-blue-600">
             Documents
           </Link>
-          <a href="#" className="hover:text-blue-600">
+          <Link to="/instructions" className="hover:text-blue-600">
             Instructions
-          </a>
-          <a href="#" className="hover:text-blue-600">
+          </Link>
+          <button
+            onClick={() => {
+              localStorage.clear();
+              window.location.href = "/login";
+            }}
+            className="text-left hover:text-blue-600"
+          >
             Logout
-          </a>
+          </button>
         </nav>
       </aside>
 
@@ -119,7 +128,10 @@ const StudentHomePage = () => {
         <header className="mb-6">
           <h1 className="text-3xl font-bold text-gray-800">Welcome! 👋</h1>
           <p className="text-gray-500 mt-1">
-            Here’s your convocation status and information.
+            Hello, {studentName} ({studentEmail})
+          </p>
+          <p className="text-gray-500 mt-1">
+            Here's your convocation status and information.
           </p>
         </header>
 
@@ -152,10 +164,19 @@ const StudentHomePage = () => {
 
           {/* Documents */}
           <div className="bg-white rounded-xl shadow p-5">
-            <h2 className="text-xl font-semibold mb-2">Documents</h2>
+            <div className="flex items-center justify-between mb-2">
+              <h2 className="text-xl font-semibold">Documents</h2>
+              <button
+                onClick={() => fetchDocuments(studentEmail)}
+                className="text-sm text-blue-600 hover:underline"
+              >
+                🔄 Refresh Status
+              </button>
+            </div>
+
             <p>
-              Upload the photo of your identity card by clicking on documents
-              option in side bar.
+              Upload the photo of your identity card by clicking on the
+              documents option in the sidebar.
             </p>
             {documents.length === 0 ? (
               <p className="text-gray-500 mt-2">No documents uploaded yet.</p>
@@ -193,20 +214,22 @@ const StudentHomePage = () => {
         </div>
 
         {/* Attendance Preference */}
-        <div className="mt-10 bg-white rounded-xl shadow p-6">
-          <h2 className="text-xl font-bold mb-4">Attendance Preference</h2>
-          <p className="text-gray-700 mb-2">
-            How would you like to attend the convocation ceremony?
+        <div className="bg-white rounded-xl shadow p-5 mt-6">
+          <h2 className="text-xl font-semibold mb-4">Attendance Preference</h2>
+          <div className="flex items-center space-x-4">
+            <label className="text-gray-700">Select your preferred mode:</label>
+            <select
+              value={attendanceMode}
+              onChange={handleAttendanceChange}
+              className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="physical">Physical Attendance</option>
+              <option value="online">Online Attendance</option>
+            </select>
+          </div>
+          <p className="text-sm text-gray-500 mt-2">
+            Current preference: <span className="font-medium">{attendanceMode || "Not set"}</span>
           </p>
-          <select
-            value={attendanceMode}
-            onChange={handleAttendanceChange}
-            className="border border-gray-300 rounded px-4 py-2"
-          >
-            <option value="">-- Select Mode --</option>
-            <option value="online">Online</option>
-            <option value="physical">Physical</option>
-          </select>
         </div>
 
         {/* Instructions */}
