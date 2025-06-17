@@ -3,12 +3,14 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const path = require("path");
+// Adjust path if needed
 
 // Route imports
 const studentRoutes = require("./Routes/studentRoutes");
 const adminRoutes = require("./Routes/adminRoutes");
 const authRoutes = require("./Routes/authRoutes");
 const documentRoutes = require("./Routes/DocumentRoutes");
+const geminiRoutes = require("./Routes/gemini");
 
 dotenv.config();
 
@@ -29,6 +31,8 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Routes
 app.use("/api/student", studentRoutes);
+app.use("/api/gemini", geminiRoutes);
+
 app.use("/api/admin", adminRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/docs", documentRoutes);
