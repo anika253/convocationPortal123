@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import StudentChat from "./StudentChat";
 
 const StudentHomePage = () => {
   const [studentName, setStudentName] = useState("");
@@ -69,7 +70,7 @@ const StudentHomePage = () => {
         `http://localhost:5000/api/student/attendance/${studentId}`,
         { mode: selectedMode }
       );
-      
+
       if (response.data.student) {
         setAttendanceMode(response.data.student.attendanceMode);
         alert("Your attendance preference has been saved successfully.");
@@ -228,7 +229,8 @@ const StudentHomePage = () => {
             </select>
           </div>
           <p className="text-sm text-gray-500 mt-2">
-            Current preference: <span className="font-medium">{attendanceMode || "Not set"}</span>
+            Current preference:{" "}
+            <span className="font-medium">{attendanceMode || "Not set"}</span>
           </p>
         </div>
 
@@ -240,6 +242,13 @@ const StudentHomePage = () => {
             <li>Carry your admit card and ID proof.</li>
             <li>Dress code: Formal attire.</li>
           </ul>
+        </div>
+        {/* AI Chatbot Section */}
+        <div className="mt-10 bg-white rounded-xl shadow p-6">
+          <h2 className="text-2xl font-bold mb-4 text-indigo-700">
+            Ask ConvoBot 🤖
+          </h2>
+          <StudentChat />
         </div>
       </main>
     </div>
