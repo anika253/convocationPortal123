@@ -1,6 +1,6 @@
 # 🗂️ Convo Portal
 
-A full-stack web application to simplify and streamline academic communication between students and faculty. It allows secure document sharing, organized dashboards, and planned chatbot integration — all within a responsive interface.
+A full-stack web application to simplify and streamline academic communication between students and faculty. It enables secure document sharing, role-based dashboards, and includes an integrated Gemini-powered chatbot — all within a responsive and modern interface.
 
 ---
 
@@ -8,14 +8,16 @@ A full-stack web application to simplify and streamline academic communication b
 
 > _Coming Soon_ — Will be hosted on **Render** / **Vercel** with Docker support.
 
+---
+
 ## 🚀 Project Overview
 
 **Convo Portal** is built to improve student-faculty interactions by creating a one-stop portal for:
-- Document sharing (assignments, notices, etc.)
+- Document sharing (assignments, notices, certificates)
 - Role-based dashboards
 - File history and access logs
-- Upcoming: AI Chatbot support to guide users
-- Dockerized setup for seamless deployment and scalability
+- 🧠 Gemini Chatbot integration for guided assistance
+- 🐳 Docker-ready architecture for smooth deployment
 
 ---
 
@@ -25,17 +27,20 @@ A full-stack web application to simplify and streamline academic communication b
 - React.js  
 - Tailwind CSS  
 - Axios  
-- React Router
+- React Router DOM
 
 ### 🔧 Backend
 - Node.js  
 - Express.js  
 - MongoDB (Mongoose ODM)
 
+### 🤖 AI Integration
+- **Gemini API** (by Google AI) for chatbot functionality
+
 ### 🧰 Tools & Platforms
 - Git & GitHub  
 - Postman  
-- Docker (planned)  
+- Docker (in progress)  
 - Vercel / Render (for deployment)
 
 ---
@@ -44,24 +49,27 @@ A full-stack web application to simplify and streamline academic communication b
 
 | Role      | Functionality |
 |-----------|---------------|
-| 👩‍🎓 Student | - Register/Login securely<br> - Upload documents (PDFs, assignments)<br> - View previously uploaded files<br> - Personalized dashboard |
-| 👨‍🏫 Faculty | - Access all student uploads<br> - Download files<br> - Manage and track student submissions |
-| 🔐 Authentication | - Session-based login system with form validation |
-| 🧠 AI Chatbot *(coming soon)* | - Guide users with queries related to document upload, deadlines, dashboard usage |
-| 🐳 Docker Support *(planned)* | - Full Docker containerization for production |
-| 💾 MongoDB Integration | - Store user profiles, document metadata, timestamps |
+| 👩‍🎓 Student | - Register/Login securely<br> - Upload documents (PDFs, assignments)<br> - View upload history<br> - Personalized dashboard |
+| 👨‍🏫 Faculty | - Access all student uploads<br> - Download & track documents<br> - Organized dashboard for submissions |
+| 🔐 Authentication | - Session-based login with secure form validations |
+| 🧠 Gemini Chatbot | - Built-in chatbot to assist with queries regarding uploads, deadlines, dashboard navigation, and general help |
+| 🐳 Docker Support *(in progress)* | - Dockerfile and docker-compose setup for production readiness |
+| 💾 MongoDB Integration | - Stores user profiles, documents, and metadata securely |
 
+---
 
-📌 **Future Enhancements**  
-- 🤖 AI Chatbot Integration using OpenAI/GPT API  
-- 📦 Docker Support: Dockerfile and docker-compose setup  
-- 🔍 Search and filter documents  
-- 🔔 Notification system (upload alerts, feedback)  
-- 📧 Email integration  
-- 📊 Analytics dashboard for faculty  
-- 🌐 Hosting on Render, Vercel, or AWS
+## 📌 Future Enhancements
 
+- 🔍 Document search and filtering  
+- 📧 Email integration for upload notifications  
+- 🔔 In-app notification system  
+- 📊 Faculty analytics dashboard  
+- 🌐 Hosting on Render, Vercel, or AWS  
+- 🛡️ Enhanced role-based access control with middleware
 
+---
+
+## 🧪 Setup Instructions
 ### backend setup
 1.cd backend
 2.npm install
