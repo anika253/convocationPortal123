@@ -266,7 +266,8 @@ const StudentHomePage = () => {
               You can download the slip once you are done with payment and
               document verification and they accepted
             </li>
-            <li>Dress code: Formal attire.</li>
+            <li>Dress code is formal attire.</li>
+            <li> For any queries, Convo AI is all ready to assist you !</li>
           </ul>
         </div>
         {/* AI Chatbot Section */}
