@@ -5,15 +5,17 @@ const {
   getAllStudents,
   getStudentByEmail,
   updateAttendanceMode,
-  updateStudentStatus, // ✅ Add this import
-} = require("../controllers/studentController");
+  updateStudentStatus,
+  generateConvocationSlip,
+} = require("../Controllers/StudentController");
 
 router.post("/register", addStudent);
 router.get("/", getAllStudents);
 router.get("/:email", getStudentByEmail);
 router.put("/status/:studentId", updateStudentStatus);
+router.get("/slip/:email", generateConvocationSlip); // ✅ No verifyStudent
 
-// ✅ New route for updating attendance mode
+// ✅ Attendance update
 router.put("/attendance/:studentId", updateAttendanceMode);
 
 module.exports = router;

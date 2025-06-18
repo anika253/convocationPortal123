@@ -1,5 +1,6 @@
 const Student = require("../models/Student");
 const sendMail = require("../utils/mailer");
+const PDFDocument = require("pdfkit");
 
 // ✅ Register or update student
 const addStudent = async (req, res) => {
@@ -134,11 +135,61 @@ const updateAttendanceMode = async (req, res) => {
 
     res.status(200).json({
       message: "Attendance mode updated successfully",
-      student
+      student,
     });
   } catch (error) {
     console.error("Error updating attendance mode:", error);
     res.status(500).json({ message: "Failed to update attendance mode" });
+  }
+};
+const generateConvocationSlip = async (req, res) => {
+  const studentId = req.user.id;
+
+  try {
+    const student = await Student.findById(studentId);
+    if (!student || !student.paymentDone) {
+      return res.status(400).json({ error: "Payment not completed." });
+    }
+
+    const documents = await Document.find({ studentId });
+    const allApproved = documents.every((doc) => doc.status === "Approved");
+
+    if (!allApproved) {
+      return res.status(400).json({ error: "All documents not approved." });
+    }
+
+    // Generate PDF
+    const doc = new PDFDocument();
+    let buffers = [];
+
+    doc.on("data", buffers.push.bind(buffers));
+    doc.on("end", () => {
+      const pdfData = Buffer.concat(buffers);
+      res
+        .writeHead(200, {
+          "Content-Type": "application/pdf",
+          "Content-Disposition": "attachment;filename=ConvocationSlip.pdf",
+          "Content-Length": pdfData.length,
+        })
+        .end(pdfData);
+    });
+
+    doc.fontSize(20).text("NIT Hamirpur Convocation Slip", { align: "center" });
+    doc.moveDown();
+    doc.fontSize(14).text(`Name: ${student.name}`);
+    doc.text(`Email: ${student.email}`);
+    doc.text(`Roll Number: ${student.rollno}`);
+    doc.text(`Batch: ${student.batch || "2021-2025"}`);
+    doc.moveDown();
+    doc.text(`✅ Payment Verified`);
+    doc.text(`✅ All Documents Approved`);
+    doc.moveDown();
+    doc.text(`🎓 Venue: Institute Hall`);
+    doc.text(`🗓️ Date: 25th July 2025`);
+    doc.end();
+  } catch (err) {
+    console.error("Error generating slip:", err.message);
+    res.status(500).json({ error: "Server error generating slip." });
   }
 };
 
@@ -148,4 +199,5 @@ module.exports = {
   getStudentByEmail,
   updateStudentStatus,
   updateAttendanceMode,
+  generateConvocationSlip,
 };

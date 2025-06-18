@@ -11,6 +11,7 @@ const StudentHomePage = () => {
   const [documents, setDocuments] = useState([]);
   const [paymentStatus, setPaymentStatus] = useState("pending");
   const [attendanceMode, setAttendanceMode] = useState("");
+  const [slipUrl, setSlipUrl] = useState("");
 
   useEffect(() => {
     const email = localStorage.getItem("studentEmail");
@@ -34,6 +35,26 @@ const StudentHomePage = () => {
 
     fetchAllData();
   }, []);
+  const fetchSlip = async () => {
+    try {
+      const token = localStorage.getItem("studentToken"); // ✅ JWT from login
+      const res = await axios.get("http://localhost:5000/api/student/slip", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        responseType: "blob", // Important to handle PDF/Blob
+      });
+
+      const file = new Blob([res.data], { type: "application/pdf" });
+      const fileURL = URL.createObjectURL(file);
+      setSlipUrl(fileURL);
+    } catch (error) {
+      console.error("Error generating slip:", error);
+      alert(
+        "Could not generate slip. Please ensure your payment and documents are approved."
+      );
+    }
+  };
 
   const fetchDocuments = async (email) => {
     try {
@@ -239,7 +260,12 @@ const StudentHomePage = () => {
           <h2 className="text-2xl font-bold mb-4">Important Instructions</h2>
           <ul className="list-disc list-inside text-gray-700 space-y-2">
             <li>Arrive 30 minutes before the event.</li>
-            <li>Carry your admit card and ID proof.</li>
+            <li>Carry your ID card along with the convocation slip.</li>
+            <li>
+              {" "}
+              You can download the slip once you are done with payment and
+              document verification and they accepted
+            </li>
             <li>Dress code: Formal attire.</li>
           </ul>
         </div>
@@ -249,6 +275,35 @@ const StudentHomePage = () => {
             Ask ConvoBot 🤖
           </h2>
           <StudentChat />
+        </div>
+        {/* Convocation Slip Download Section */}
+        <div className="mt-10 bg-white rounded-xl shadow p-6">
+          <h2 className="text-2xl font-bold mb-4 text-blue-700">
+            Convocation Slip 🎓
+          </h2>
+          <p className="text-gray-600 mb-3">
+            Download your slip once payment is completed and documents are
+            approved.You need to carry this slip at the day of convocation along
+            with ur ID card.
+          </p>
+          <button
+            onClick={fetchSlip}
+            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+          >
+            Generate Convocation Slip
+          </button>
+
+          {slipUrl && (
+            <div className="mt-4">
+              <a
+                href={slipUrl}
+                download="Convocation_Slip.pdf"
+                className="text-blue-600 hover:underline"
+              >
+                📥 Click here to download your slip
+              </a>
+            </div>
+          )}
         </div>
       </main>
     </div>
