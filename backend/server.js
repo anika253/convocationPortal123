@@ -15,15 +15,25 @@ const geminiRoutes = require("./Routes/gemini");
 dotenv.config();
 
 const app = express();
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://convocation-portal123.vercel.app",
+];
 
-// Middleware
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
+
 app.use(express.json());
 
 // Serve static uploads
