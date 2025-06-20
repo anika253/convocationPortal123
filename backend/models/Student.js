@@ -60,6 +60,12 @@ const studentSchema = new mongoose.Schema(
       type: String, // Admin name or ID
       default: null,
     },
+
+    // 🟢 Payment status
+    paymentDone: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true, // adds createdAt and updatedAt

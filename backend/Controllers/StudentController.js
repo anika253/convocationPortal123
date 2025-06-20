@@ -142,16 +142,20 @@ const updateAttendanceMode = async (req, res) => {
     res.status(500).json({ message: "Failed to update attendance mode" });
   }
 };
+
+const Document = require("../models/Document");
+const Payment = require("../models/Payment");
+
 const generateConvocationSlip = async (req, res) => {
-  const studentId = req.user.id;
+  const studentEmail = req.params.email;
 
   try {
-    const student = await Student.findById(studentId);
+    const student = await Student.findOne({ email: studentEmail });
     if (!student || !student.paymentDone) {
       return res.status(400).json({ error: "Payment not completed." });
     }
 
-    const documents = await Document.find({ studentId });
+    const documents = await Document.find({ studentId: student._id });
     const allApproved = documents.every((doc) => doc.status === "Approved");
 
     if (!allApproved) {
