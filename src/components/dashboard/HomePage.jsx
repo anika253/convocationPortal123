@@ -37,13 +37,10 @@ const StudentHomePage = () => {
   }, []);
   const fetchSlip = async () => {
     try {
-      const token = localStorage.getItem("studentToken"); // ✅ JWT from login
-      const res = await axios.get("http://localhost:5000/api/student/slip", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        responseType: "blob", // Important to handle PDF/Blob
-      });
+      const res = await axios.get(
+        `https://convocationportal123-6.onrender.com/api/student/slip?email=${studentEmail}`,
+        { responseType: "blob" }
+      );
 
       const file = new Blob([res.data], { type: "application/pdf" });
       const fileURL = URL.createObjectURL(file);
@@ -77,10 +74,53 @@ const StudentHomePage = () => {
       console.error("Error fetching student info:", error);
     }
   };
+  const handlePayment = async () => {
+    try {
+      const { data } = await axios.post(
+        "https://convocationportal123-6.onrender.com/api/payment/create-order"
+      );
 
-  const handlePayment = () => {
-    alert("Redirecting to payment gateway...");
-    setPaymentStatus("completed");
+      const options = {
+        key: "rzp_test_X0XGdKY89sUBlG", // Replace with real Razorpay Key ID
+        amount: 120000, // ₹1200 in paise
+        currency: "INR",
+        name: "Convo Portal",
+        description: "Convocation Fee",
+        order_id: data.orderId,
+        handler: async function (response) {
+          alert("Payment Successful! ID: " + response.razorpay_payment_id);
+          setPaymentStatus("completed");
+
+          try {
+            await axios.post(
+              "https://convocationportal123-6.onrender.com/api/payment/verify",
+              {
+                paymentId: response.razorpay_payment_id,
+                orderId: response.razorpay_order_id,
+                signature: response.razorpay_signature,
+                email: studentEmail,
+              }
+            );
+          } catch (err) {
+            console.error("Error saving payment:", err);
+          }
+        },
+
+        prefill: {
+          name: studentName,
+          email: studentEmail,
+        },
+        theme: {
+          color: "#0d6efd",
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    } catch (error) {
+      console.error("Payment failed:", error);
+      alert("Something went wrong. Try again later.");
+    }
   };
 
   const handleAttendanceChange = async (e) => {
