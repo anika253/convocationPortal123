@@ -5,10 +5,10 @@
   "main": "server.js",
   "type": "commonjs",
   "scripts": {
-  "test": "echo \"Error: no test specified\" && exit 1",
-  "start": "node server.js",
-  "build": "echo 'No build needed for backend'"
-},
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "build": "echo 'No build needed for backend'"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -24,6 +24,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.13.2",
     "multer": "^2.0.1",
+    "nodemailer": "^7.0.3",
     "nodemon": "^3.1.10",
     "pdfkit": "^0.17.1"
   }
