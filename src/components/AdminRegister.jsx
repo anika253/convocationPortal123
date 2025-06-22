@@ -10,8 +10,8 @@ function AdminRegister() {
     email: "",
     password: "",
   });
-  const [modalIsOpen, setModalIsOpen] = useState(false);  // Track modal visibility
-  const [modalMessage, setModalMessage] = useState("");  // Track modal message
+  const [modalIsOpen, setModalIsOpen] = useState(false); // Track modal visibility
+  const [modalMessage, setModalMessage] = useState(""); // Track modal message
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -20,10 +20,13 @@ function AdminRegister() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/api/admin/register", {
-        ...form,
-        role: "admin",
-      });
+      const res = await axios.post(
+        "https://convocationportal123-6.onrender.com/api/admin/register",
+        {
+          ...form,
+          role: "admin",
+        }
+      );
 
       // Open modal and set success message
       setModalMessage(res.data.message);
@@ -49,7 +52,9 @@ function AdminRegister() {
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-600">Name</label>
+            <label className="block text-sm font-medium text-gray-600">
+              Name
+            </label>
             <input
               type="text"
               name="name"
@@ -60,7 +65,9 @@ function AdminRegister() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-600">Email</label>
+            <label className="block text-sm font-medium text-gray-600">
+              Email
+            </label>
             <input
               type="email"
               name="email"
@@ -71,7 +78,9 @@ function AdminRegister() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-600">Password</label>
+            <label className="block text-sm font-medium text-gray-600">
+              Password
+            </label>
             <input
               type="password"
               name="password"
@@ -93,12 +102,12 @@ function AdminRegister() {
       {/* Toast-like modal for success or error messages */}
       {modalIsOpen && (
         <div
-        className="fixed top-0 right-0 m-3 p-3 bg-green-600 text-white rounded-lg shadow-lg"
-        style={{
-          zIndex: 9999, 
-          maxWidth: "250px", 
-          fontSize: "14px", 
-        }}
+          className="fixed top-0 right-0 m-3 p-3 bg-green-600 text-white rounded-lg shadow-lg"
+          style={{
+            zIndex: 9999,
+            maxWidth: "250px",
+            fontSize: "14px",
+          }}
         >
           <div className="flex justify-between items-center">
             <h3 className="font-semibold">Registration Status</h3>

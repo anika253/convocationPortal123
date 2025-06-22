@@ -35,6 +35,7 @@ const StudentHomePage = () => {
 
     fetchAllData();
   }, []);
+
   const fetchSlip = async () => {
     try {
       const res = await axios.get(
@@ -56,9 +57,9 @@ const StudentHomePage = () => {
   const fetchDocuments = async (email) => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/docs/student/${email}`
+        `https://convocationportal123-6.onrender.com/api/docs/student/${email}`
       );
-      setDocuments(res.data); // ✅ Now handles multiple documents
+      setDocuments(res.data);
     } catch (error) {
       console.error("Error fetching student documents:", error);
     }
@@ -66,7 +67,9 @@ const StudentHomePage = () => {
 
   const fetchStudent = async (email) => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/student/${email}`);
+      const res = await axios.get(
+        `https://convocationportal123-6.onrender.com/api/student/${email}`
+      );
       const student = res.data;
       setAttendanceMode(student.attendanceMode || "");
       localStorage.setItem("studentId", student._id);
@@ -74,6 +77,7 @@ const StudentHomePage = () => {
       console.error("Error fetching student info:", error);
     }
   };
+
   const handlePayment = async () => {
     try {
       const { data } = await axios.post(
@@ -81,7 +85,7 @@ const StudentHomePage = () => {
       );
 
       const options = {
-        key: "rzp_test_X0XGdKY89sUBlG", // Replace with real Razorpay Key ID
+        key: "rzp_test_X0XGdKY89sUBlG", // Replace with your Razorpay Key
         amount: 120000, // ₹1200 in paise
         currency: "INR",
         name: "Convo Portal",
@@ -105,7 +109,6 @@ const StudentHomePage = () => {
             console.error("Error saving payment:", err);
           }
         },
-
         prefill: {
           name: studentName,
           email: studentEmail,
@@ -128,7 +131,7 @@ const StudentHomePage = () => {
     try {
       const studentId = localStorage.getItem("studentId");
       const response = await axios.put(
-        `http://localhost:5000/api/student/attendance/${studentId}`,
+        `https://convocationportal123-6.onrender.com/api/student/attendance/${studentId}`,
         { mode: selectedMode }
       );
 
@@ -139,7 +142,6 @@ const StudentHomePage = () => {
     } catch (error) {
       console.error("Failed to update attendance mode:", error);
       alert("Failed to save attendance preference. Please try again.");
-      // Revert the select value to the previous state
       e.target.value = attendanceMode;
     }
   };
@@ -302,14 +304,14 @@ const StudentHomePage = () => {
             <li>Arrive 30 minutes before the event.</li>
             <li>Carry your ID card along with the convocation slip.</li>
             <li>
-              {" "}
               You can download the slip once you are done with payment and
-              document verification and they accepted
+              document verification and they are accepted.
             </li>
             <li>Dress code is formal attire.</li>
-            <li> For any queries, Convo AI is all ready to assist you !</li>
+            <li>For any queries, Convo AI is all ready to assist you!</li>
           </ul>
         </div>
+
         {/* AI Chatbot Section */}
         <div className="mt-10 bg-white rounded-xl shadow p-6">
           <h2 className="text-2xl font-bold mb-4 text-indigo-700">
@@ -317,6 +319,7 @@ const StudentHomePage = () => {
           </h2>
           <StudentChat />
         </div>
+
         {/* Convocation Slip Download Section */}
         <div className="mt-10 bg-white rounded-xl shadow p-6">
           <h2 className="text-2xl font-bold mb-4 text-blue-700">
@@ -324,8 +327,8 @@ const StudentHomePage = () => {
           </h2>
           <p className="text-gray-600 mb-3">
             Download your slip once payment is completed and documents are
-            approved.You need to carry this slip at the day of convocation along
-            with ur ID card.
+            approved. You need to carry this slip on the day of convocation
+            along with your ID card.
           </p>
           <button
             onClick={fetchSlip}

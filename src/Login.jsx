@@ -12,7 +12,10 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/login", form);
+      const res = await axios.post(
+        "https://convocationportal123-6.onrender.com/login",
+        form
+      );
       setToken(res.data.token);
       localStorage.setItem("token", res.data.token);
       alert("Login Successful!");

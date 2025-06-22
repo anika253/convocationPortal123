@@ -19,13 +19,16 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://convocation-portal123.vercel.app",
+  "https://convocation-portal123-6ed1.vercel.app",
 ];
-
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (
+        !origin ||
+        allowedOrigins.includes(origin) ||
+        /vercel\.app$/.test(origin)
+      ) {
         callback(null, true);
       } else {
         callback(new Error("Not allowed by CORS"));
@@ -35,7 +38,6 @@ app.use(
     credentials: true,
   })
 );
-
 app.use(express.json());
 
 // Serve static uploads

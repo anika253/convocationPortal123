@@ -15,7 +15,7 @@ const StudentChat = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/gemini/generate",
+        "https://convocationportal123-6.onrender.com/api/gemini/generate",
         {
           prompt,
         }

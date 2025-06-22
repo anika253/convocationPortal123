@@ -20,7 +20,10 @@ const StudentUploadForm = () => {
     formData.append("studentId", studentId); // ✅ use actual ID
 
     try {
-      await axios.post("http://localhost:5000/api/docs/upload", formData);
+      await axios.post(
+        "https://convocationportal123-6.onrender.com/api/docs/upload",
+        formData
+      );
       setMessage("Uploaded successfully ✅");
     } catch (err) {
       console.error(err);

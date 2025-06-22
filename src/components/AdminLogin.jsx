@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import AdminDashboard from "./dashboard/AdminDashboard";
+
 function AdminLogin() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [message, setMessage] = useState(null);
@@ -14,15 +15,17 @@ function AdminLogin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", {
-        ...form,
-        role: "admin",
-      });
+      const res = await axios.post(
+        "https://convocationportal123-6.onrender.com/api/auth/login",
+        {
+          ...form,
+          role: "admin",
+        }
+      );
 
-      // On success, show success message and navigate
       if (res.data === "Admin Login Successful") {
         setMessage({ type: "success", text: "Admin Login Successful!" });
-        setTimeout(() => navigate("/AdminDashboard"), 1000); // Adjust to your admin dashboard route
+        setTimeout(() => navigate("/AdminDashboard"), 1000);
       }
     } catch (err) {
       setMessage({

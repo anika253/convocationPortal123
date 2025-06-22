@@ -10,9 +10,14 @@ connectDB();
 
 const app = express();
 
+const allowedOrigins = [
+  "http://localhost:5173", // dev
+  "https://convocation-portal123-6ed1.vercel.app", // deployed Vercel frontend
+];
+
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: allowedOrigins,
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })

@@ -15,7 +15,7 @@ function Login() {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        "https://convocationportal123-6.onrender.com/api/auth/login",
         form
       );
       alert("Login Successful!");
@@ -28,7 +28,9 @@ function Login() {
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
       <div className="bg-white shadow-xl rounded-2xl p-10 w-full max-w-md">
-        <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Login</h2>
+        <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">
+          Login
+        </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="email"

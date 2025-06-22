@@ -4,13 +4,16 @@ import "./AdminApprovalPanel.css";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 
+// ✅ Your deployed backend URL
+const BASE_URL = "https://convocationportal123-6.onrender.com";
+
 const AdminApprovalPanel = () => {
   const [students, setStudents] = useState([]);
   const [filters, setFilters] = useState({ rollno: "", department: "" });
 
   const fetchStudents = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/admin/students/");
+      const res = await axios.get(`${BASE_URL}/api/admin/students/`);
       const sorted = res.data.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
       );
@@ -22,7 +25,7 @@ const AdminApprovalPanel = () => {
 
   const updateStudentStatus = async (id, status) => {
     try {
-      await axios.put(`http://localhost:5000/api/admin/status/${id}`, {
+      await axios.put(`${BASE_URL}/api/admin/status/${id}`, {
         status,
         reviewedBy: "Admin",
       });
@@ -34,7 +37,7 @@ const AdminApprovalPanel = () => {
 
   const updateDocumentStatus = async (docId, status) => {
     try {
-      await axios.put(`http://localhost:5000/api/docs/admin/update/${docId}`, {
+      await axios.put(`${BASE_URL}/api/docs/admin/update/${docId}`, {
         status,
       });
       fetchStudents();
@@ -142,7 +145,7 @@ const AdminApprovalPanel = () => {
                   <div key={doc._id} style={{ marginBottom: "8px" }}>
                     <a
                       className="view-doc-btn"
-                      href={`http://localhost:5000/${doc.filePath}`}
+                      href={`${BASE_URL}/${doc.filePath}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{ display: "inline-block", marginRight: "8px" }}
@@ -150,20 +153,25 @@ const AdminApprovalPanel = () => {
                       📄 View Document {index + 1}
                     </a>
                     <span style={{ marginRight: "8px" }}>
-                      Status: {doc.status.charAt(0).toUpperCase() + doc.status.slice(1)}
+                      Status:{" "}
+                      {doc.status.charAt(0).toUpperCase() + doc.status.slice(1)}
                     </span>
                     {doc.status === "pending" && (
                       <>
                         <button
                           className="approve-btn"
-                          onClick={() => updateDocumentStatus(doc._id, "approved")}
+                          onClick={() =>
+                            updateDocumentStatus(doc._id, "approved")
+                          }
                           style={{ marginRight: "4px" }}
                         >
                           ✅ Approve
                         </button>
                         <button
                           className="reject-btn"
-                          onClick={() => updateDocumentStatus(doc._id, "rejected")}
+                          onClick={() =>
+                            updateDocumentStatus(doc._id, "rejected")
+                          }
                         >
                           ❌ Reject
                         </button>
@@ -174,7 +182,6 @@ const AdminApprovalPanel = () => {
               </div>
             )}
 
-            {/* ✅ Action Buttons for Pending Status */}
             {s.status === "pending" && (
               <div className="button-group">
                 <button

@@ -13,8 +13,8 @@ function StudentRegister() {
     department: "",
     registered: false,
   });
-  const [modalIsOpen, setModalIsOpen] = useState(false);  // Track modal visibility
-  const [modalMessage, setModalMessage] = useState("");  // Track modal message
+  const [modalIsOpen, setModalIsOpen] = useState(false); // Track modal visibility
+  const [modalMessage, setModalMessage] = useState(""); // Track modal message
 
   const departments = [
     "Electronics and Communication Department",
@@ -39,10 +39,13 @@ function StudentRegister() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/api/student/register", {
-        ...form,
-        role: "student",
-      });
+      const res = await axios.post(
+        "https://convocationportal123-6.onrender.com/api/student/register",
+        {
+          ...form,
+          role: "student",
+        }
+      );
 
       // Open modal and set success message
       setModalMessage("Student Registration Successful! You can now log in.");
@@ -171,9 +174,9 @@ function StudentRegister() {
         <div
           className="fixed top-0 right-0 m-3 p-3 bg-green-600 text-white rounded-lg shadow-lg"
           style={{
-            zIndex: 9999, 
-            maxWidth: "250px", 
-            fontSize: "14px", 
+            zIndex: 9999,
+            maxWidth: "250px",
+            fontSize: "14px",
           }}
         >
           <div className="flex justify-between items-center">
