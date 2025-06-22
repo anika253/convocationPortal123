@@ -18,21 +18,20 @@ function StudentLogin() {
         "https://convocationportal123-6.onrender.com/api/auth/login",
         {
           ...form,
-          role: "student",
+          role: "student", // Ensure role is sent as expected
         }
       );
 
       if (response.data.message === "Login successful") {
         const student = response.data.student;
 
-        // ✅ Store essential student info in localStorage
+        // Store student data
         localStorage.setItem("studentId", student._id);
         localStorage.setItem("studentEmail", student.email);
         localStorage.setItem("studentName", student.name);
 
         setMessage({ type: "success", text: "Student Login Successful!" });
 
-        // Navigate to home after a short delay
         setTimeout(() => navigate("/home"), 1000);
       }
     } catch (err) {

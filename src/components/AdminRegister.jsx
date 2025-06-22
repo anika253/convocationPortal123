@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import Modal from "react-modal";
 
+// Required for accessibility
 Modal.setAppElement("#root");
 
 function AdminRegister() {
@@ -10,8 +11,9 @@ function AdminRegister() {
     email: "",
     password: "",
   });
-  const [modalIsOpen, setModalIsOpen] = useState(false); // Track modal visibility
-  const [modalMessage, setModalMessage] = useState(""); // Track modal message
+
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -24,17 +26,15 @@ function AdminRegister() {
         "https://convocationportal123-6.onrender.com/api/admin/register",
         {
           ...form,
-          role: "admin",
         }
       );
 
-      // Open modal and set success message
-      setModalMessage(res.data.message);
+      // Show success message
+      setModalMessage(res.data.message || "Registration successful!");
       setModalIsOpen(true);
-
       console.log(res.data);
     } catch (err) {
-      setModalMessage(err.response?.data?.msg || "Registration Failed!");
+      setModalMessage(err.response?.data?.message || "Registration Failed!");
       setModalIsOpen(true);
       console.error(err);
     }
@@ -99,7 +99,7 @@ function AdminRegister() {
         </form>
       </div>
 
-      {/* Toast-like modal for success or error messages */}
+      {/* Toast-style modal */}
       {modalIsOpen && (
         <div
           className="fixed top-0 right-0 m-3 p-3 bg-green-600 text-white rounded-lg shadow-lg"

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import AdminDashboard from "./dashboard/AdminDashboard";
 
 function AdminLogin() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -16,20 +15,20 @@ function AdminLogin() {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "https://convocationportal123-6.onrender.com/api/auth/login",
-        {
-          ...form,
-        }
+        "https://convocationportal123-6.onrender.com/api/admin/login", // ✅ Corrected endpoint
+        { ...form }
       );
 
-      if (res.data === "Admin Login Successful") {
+      if (res.data.message === "Admin Login Successful") {
         setMessage({ type: "success", text: "Admin Login Successful!" });
         setTimeout(() => navigate("/AdminDashboard"), 1000);
+      } else {
+        setMessage({ type: "error", text: res.data.message || "Login Failed" });
       }
     } catch (err) {
       setMessage({
         type: "error",
-        text: err.response?.data?.message || "Admin Login Failed!",
+        text: err.response?.data?.message || "Login Failed!",
       });
     }
   };

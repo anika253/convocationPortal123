@@ -13,8 +13,9 @@ function StudentRegister() {
     department: "",
     registered: false,
   });
-  const [modalIsOpen, setModalIsOpen] = useState(false); // Track modal visibility
-  const [modalMessage, setModalMessage] = useState(""); // Track modal message
+
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
 
   const departments = [
     "Electronics and Communication Department",
@@ -43,15 +44,12 @@ function StudentRegister() {
         "https://convocationportal123-6.onrender.com/api/student/register",
         {
           ...form,
-          role: "student",
+          role: "student", // ✅ Required to avoid "Invalid role"
         }
       );
 
-      // Open modal and set success message
       setModalMessage("Student Registration Successful! You can now log in.");
       setModalIsOpen(true);
-
-      console.log(res.data);
 
       setForm({
         name: "",
@@ -62,7 +60,7 @@ function StudentRegister() {
         registered: false,
       });
     } catch (err) {
-      setModalMessage(err.response?.data?.msg || "Registration Failed!");
+      setModalMessage(err.response?.data?.message || "Registration Failed!");
       setModalIsOpen(true);
       console.error(err);
     }
@@ -89,7 +87,7 @@ function StudentRegister() {
               value={form.name}
               onChange={handleChange}
               required
-              className="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:outline-none"
+              className="w-full mt-1 px-4 py-2 border rounded-lg"
             />
           </div>
           <div>
@@ -102,7 +100,7 @@ function StudentRegister() {
               value={form.email}
               onChange={handleChange}
               required
-              className="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:outline-none"
+              className="w-full mt-1 px-4 py-2 border rounded-lg"
             />
           </div>
           <div>
@@ -115,7 +113,7 @@ function StudentRegister() {
               value={form.password}
               onChange={handleChange}
               required
-              className="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:outline-none"
+              className="w-full mt-1 px-4 py-2 border rounded-lg"
             />
           </div>
           <div>
@@ -128,7 +126,7 @@ function StudentRegister() {
               value={form.rollno}
               onChange={handleChange}
               required
-              className="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:outline-none"
+              className="w-full mt-1 px-4 py-2 border rounded-lg"
             />
           </div>
           <div>
@@ -140,7 +138,7 @@ function StudentRegister() {
               value={form.department}
               onChange={handleChange}
               required
-              className="w-full mt-1 px-4 py-2 border rounded-lg bg-white focus:ring-indigo-500 focus:outline-none"
+              className="w-full mt-1 px-4 py-2 border rounded-lg bg-white"
             >
               <option value="" disabled>
                 Select Department
