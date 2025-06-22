@@ -19,7 +19,6 @@ function AdminLogin() {
         "https://convocationportal123-6.onrender.com/api/auth/login",
         {
           ...form,
-          role: "admin",
         }
       );
 
