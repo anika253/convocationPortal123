@@ -6,7 +6,7 @@ A full-stack web application to simplify and streamline academic communication b
 
 ## 🌐 Live Demo
 
-  Hosted on https://convocation-portal123.vercel.app
+  Hosted on https://convocation-portal123-6ed1.vercel.app
   Frontend Support-VERCEL
   Backend Support - RENDER 
 
