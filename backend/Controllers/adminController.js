@@ -5,6 +5,7 @@ const Document = require("../models/Document");
 
 // ✅ Admin Registration
 exports.adminRegister = async (req, res) => {
+  console.log("Admin Register Received Body:", req.body);
   const { name, email, password } = req.body;
 
   try {
@@ -103,9 +104,9 @@ exports.updateStudentStatus = async (req, res) => {
     // Update all documents associated with this student
     await Document.updateMany(
       { studentId: studentId },
-      { 
+      {
         status: status,
-        reviewedBy: reviewedBy || "Admin"
+        reviewedBy: reviewedBy || "Admin",
       }
     );
 
