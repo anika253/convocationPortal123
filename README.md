@@ -74,7 +74,7 @@
 
 ## 🧪 Local Development Setup  
 
-### 🔙 Backend Setup  
+
 ```bash
 cd backend
 npm install
