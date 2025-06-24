@@ -34,7 +34,8 @@
 
 ### 🔧 Backend  
 - Node.js  
-- Express.js  
+- Express.js
+- Docker  
 - MongoDB (Mongoose ODM)  
 
 ### 🤖 AI Integration  
