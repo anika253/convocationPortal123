@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import StudentChat from "./StudentChat";
 
@@ -12,6 +12,8 @@ const StudentHomePage = () => {
   const [paymentStatus, setPaymentStatus] = useState("pending");
   const [attendanceMode, setAttendanceMode] = useState("");
   const [slipUrl, setSlipUrl] = useState("");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const email = localStorage.getItem("studentEmail");
@@ -85,8 +87,8 @@ const StudentHomePage = () => {
       );
 
       const options = {
-        key: "rzp_test_X0XGdKY89sUBlG", // Replace with your Razorpay Key
-        amount: 120000, // ₹1200 in paise
+        key: "rzp_test_X0XGdKY89sUBlG",
+        amount: 120000,
         currency: "INR",
         name: "Convo Portal",
         description: "Convocation Fee",
@@ -146,6 +148,11 @@ const StudentHomePage = () => {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/studentlogin");
+  };
+
   if (loading) {
     return (
       <div className="p-10 text-center text-gray-600">
@@ -163,9 +170,6 @@ const StudentHomePage = () => {
         </div>
         <hr className="mt-4 border-t border-gray-300" />
         <nav className="flex flex-col space-y-4 text-gray-700">
-          <Link to="/" className="hover:text-blue-600">
-            Dashboard
-          </Link>
           <Link to="/payment" className="hover:text-blue-600">
             Payment
           </Link>
@@ -176,10 +180,7 @@ const StudentHomePage = () => {
             Instructions
           </Link>
           <button
-            onClick={() => {
-              localStorage.clear();
-              window.location.href = "/studentlogin";
-            }}
+            onClick={handleLogout}
             className="text-left hover:text-blue-600"
           >
             Logout
