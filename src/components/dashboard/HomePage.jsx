@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import StudentChat from "./StudentChat";
 
@@ -14,6 +14,11 @@ const StudentHomePage = () => {
   const [slipUrl, setSlipUrl] = useState("");
 
   const navigate = useNavigate();
+
+  // Refs for smooth scroll
+  const paymentRef = useRef(null);
+  const documentsRef = useRef(null);
+  const instructionsRef = useRef(null);
 
   useEffect(() => {
     const email = localStorage.getItem("studentEmail");
@@ -170,15 +175,30 @@ const StudentHomePage = () => {
         </div>
         <hr className="mt-4 border-t border-gray-300" />
         <nav className="flex flex-col space-y-4 text-gray-700">
-          <Link to="/payment" className="hover:text-blue-600">
+          <button
+            onClick={() =>
+              paymentRef.current?.scrollIntoView({ behavior: "smooth" })
+            }
+            className="text-left hover:text-blue-600"
+          >
             Payment
-          </Link>
-          <Link to="/documents" className="hover:text-blue-600">
+          </button>
+          <button
+            onClick={() =>
+              documentsRef.current?.scrollIntoView({ behavior: "smooth" })
+            }
+            className="text-left hover:text-blue-600"
+          >
             Documents
-          </Link>
-          <Link to="/instructions" className="hover:text-blue-600">
+          </button>
+          <button
+            onClick={() =>
+              instructionsRef.current?.scrollIntoView({ behavior: "smooth" })
+            }
+            className="text-left hover:text-blue-600"
+          >
             Instructions
-          </Link>
+          </button>
           <button
             onClick={handleLogout}
             className="text-left hover:text-blue-600"
@@ -202,7 +222,10 @@ const StudentHomePage = () => {
 
         <div className="grid md:grid-cols-3 gap-6">
           {/* Payment Status */}
-          <div className="bg-white rounded-xl shadow p-5">
+          <div
+            ref={paymentRef}
+            className="bg-white rounded-xl shadow p-5 scroll-mt-20"
+          >
             <h2 className="text-xl font-semibold mb-2">Payment Status</h2>
             <p className="text-gray-600 mb-3">
               Your payment is{" "}
@@ -228,7 +251,10 @@ const StudentHomePage = () => {
           </div>
 
           {/* Documents */}
-          <div className="bg-white rounded-xl shadow p-5">
+          <div
+            ref={documentsRef}
+            className="bg-white rounded-xl shadow p-5 scroll-mt-20"
+          >
             <div className="flex items-center justify-between mb-2">
               <h2 className="text-xl font-semibold">Documents</h2>
               <button
@@ -299,21 +325,24 @@ const StudentHomePage = () => {
         </div>
 
         {/* Instructions */}
-        <div className="mt-10 bg-white rounded-xl shadow p-6">
+        <div
+          ref={instructionsRef}
+          className="mt-10 bg-white rounded-xl shadow p-6 scroll-mt-20"
+        >
           <h2 className="text-2xl font-bold mb-4">Important Instructions</h2>
           <ul className="list-disc list-inside text-gray-700 space-y-2">
             <li>Arrive 30 minutes before the event.</li>
             <li>Carry your ID card along with the convocation slip.</li>
             <li>
-              You can download the slip once you are done with payment and
-              document verification and they are accepted.
+              You can download the slip once payment and document verification
+              are complete.
             </li>
             <li>Dress code is formal attire.</li>
-            <li>For any queries, Convo AI is all ready to assist you!</li>
+            <li>For any queries, Convo AI is ready to assist you!</li>
           </ul>
         </div>
 
-        {/* AI Chatbot Section */}
+        {/* ChatBot */}
         <div className="mt-10 bg-white rounded-xl shadow p-6">
           <h2 className="text-2xl font-bold mb-4 text-indigo-700">
             Ask ConvoBot 🤖
@@ -321,15 +350,14 @@ const StudentHomePage = () => {
           <StudentChat />
         </div>
 
-        {/* Convocation Slip Download Section */}
+        {/* Convocation Slip */}
         <div className="mt-10 bg-white rounded-xl shadow p-6">
           <h2 className="text-2xl font-bold mb-4 text-blue-700">
             Convocation Slip 🎓
           </h2>
           <p className="text-gray-600 mb-3">
             Download your slip once payment is completed and documents are
-            approved. You need to carry this slip on the day of convocation
-            along with your ID card.
+            approved.
           </p>
           <button
             onClick={fetchSlip}
