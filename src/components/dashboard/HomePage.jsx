@@ -1,6 +1,6 @@
-/* eslint-disable no-unused-vars */
+""; /* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import StudentChat from "./StudentChat";
 
@@ -12,12 +12,10 @@ const StudentHomePage = () => {
   const [paymentStatus, setPaymentStatus] = useState("pending");
   const [attendanceMode, setAttendanceMode] = useState("");
   const [slipUrl, setSlipUrl] = useState("");
-  const [highlighted, setHighlighted] = useState(null);
 
   const navigate = useNavigate();
 
   const paymentRef = useRef(null);
-  const documentsRef = useRef(null);
   const instructionsRef = useRef(null);
 
   useEffect(() => {
@@ -158,14 +156,6 @@ const StudentHomePage = () => {
     navigate("/");
   };
 
-  const highlightSection = (ref, key, shouldScroll = true) => {
-    if (ref?.current) {
-      if (shouldScroll) ref.current.scrollIntoView({ behavior: "smooth" });
-      setHighlighted(key);
-      setTimeout(() => setHighlighted(null), 1500);
-    }
-  };
-
   if (loading) {
     return (
       <div className="p-10 text-center text-gray-600">
@@ -184,25 +174,37 @@ const StudentHomePage = () => {
         <hr className="mt-4 border-t border-gray-300" />
         <nav className="flex flex-col space-y-4 text-gray-700">
           <button
-            onClick={() => highlightSection(paymentRef, "payment", false)}
+            onClick={() => {
+              paymentRef.current?.classList.add("ring", "ring-yellow-400");
+              setTimeout(() => {
+                paymentRef.current?.classList.remove("ring", "ring-yellow-400");
+              }, 1500);
+            }}
             className="text-left hover:text-blue-600"
           >
             Payment
           </button>
-          <button
-            onClick={() =>
-              documentsRef.current?.scrollIntoView({ behavior: "smooth" })
-            }
-            className="text-left hover:text-blue-600"
-          >
+
+          <Link to="/documents" className="hover:text-blue-600">
             Documents
-          </button>
+          </Link>
+
           <button
-            onClick={() => highlightSection(instructionsRef, "instructions")}
+            onClick={() => {
+              instructionsRef.current?.scrollIntoView({ behavior: "smooth" });
+              instructionsRef.current?.classList.add("ring", "ring-blue-400");
+              setTimeout(() => {
+                instructionsRef.current?.classList.remove(
+                  "ring",
+                  "ring-blue-400"
+                );
+              }, 1500);
+            }}
             className="text-left hover:text-blue-600"
           >
             Instructions
           </button>
+
           <button
             onClick={handleLogout}
             className="text-left hover:text-blue-600"
@@ -224,117 +226,39 @@ const StudentHomePage = () => {
           </p>
         </header>
 
-        <div className="grid md:grid-cols-3 gap-6">
-          {/* Payment Status */}
-          <div
-            ref={paymentRef}
-            className={`bg-white rounded-xl shadow p-5 scroll-mt-20 transition ${
-              highlighted === "payment" ? "bg-yellow-100" : ""
-            }`}
-          >
-            <h2 className="text-xl font-semibold mb-2">Payment Status</h2>
-            <p className="text-gray-600 mb-3">
-              Your payment is{" "}
-              <span
-                className={`font-medium ${
-                  paymentStatus === "completed"
-                    ? "text-green-600"
-                    : "text-yellow-600"
-                }`}
-              >
-                {paymentStatus === "completed" ? "Completed" : "Pending"}
-              </span>
-              .
-            </p>
-            {paymentStatus !== "completed" && (
-              <button
-                onClick={handlePayment}
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-              >
-                Make Payment
-              </button>
-            )}
-          </div>
-
-          {/* Documents */}
-          <div
-            ref={documentsRef}
-            className="bg-white rounded-xl shadow p-5 scroll-mt-20"
-          >
-            <div className="flex items-center justify-between mb-2">
-              <h2 className="text-xl font-semibold">Documents</h2>
-              <button
-                onClick={() => fetchDocuments(studentEmail)}
-                className="text-sm text-blue-600 hover:underline"
-              >
-                🔄 Refresh Status
-              </button>
-            </div>
-            <p>
-              Upload the photo of your identity card by clicking on the
-              documents option in the sidebar.
-            </p>
-            {documents.length === 0 ? (
-              <p className="text-gray-500 mt-2">No documents uploaded yet.</p>
-            ) : (
-              <ul className="list-disc list-inside text-gray-600 space-y-2 mt-2">
-                {documents.map((doc) => (
-                  <li key={doc._id}>
-                    📄 {doc.filename} –{" "}
-                    <span
-                      className={`font-medium ${
-                        doc.status === "approved"
-                          ? "text-green-600"
-                          : doc.status === "rejected"
-                          ? "text-red-600"
-                          : "text-yellow-600"
-                      }`}
-                    >
-                      {doc.status.charAt(0).toUpperCase() + doc.status.slice(1)}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-
-          {/* Ceremony Details */}
-          <div className="bg-white rounded-xl shadow p-5">
-            <h2 className="text-xl font-semibold mb-2">Ceremony Details</h2>
-            <p className="text-gray-600">
-              Date: July 15, 2025
-              <br />
-              Venue: University Hall
-            </p>
-          </div>
-        </div>
-
-        {/* Attendance Preference */}
-        <div className="bg-white rounded-xl shadow p-5 mt-6">
-          <h2 className="text-xl font-semibold mb-4">Attendance Preference</h2>
-          <div className="flex items-center space-x-4">
-            <label className="text-gray-700">Select your preferred mode:</label>
-            <select
-              value={attendanceMode}
-              onChange={handleAttendanceChange}
-              className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        {/* Payment Status */}
+        <div
+          ref={paymentRef}
+          className="bg-white rounded-xl shadow p-5 scroll-mt-20"
+        >
+          <h2 className="text-xl font-semibold mb-2">Payment Status</h2>
+          <p className="text-gray-600 mb-3">
+            Your payment is{" "}
+            <span
+              className={`font-medium ${
+                paymentStatus === "completed"
+                  ? "text-green-600"
+                  : "text-yellow-600"
+              }`}
             >
-              <option value="physical">Physical Attendance</option>
-              <option value="online">Online Attendance</option>
-            </select>
-          </div>
-          <p className="text-sm text-gray-500 mt-2">
-            Current preference:{" "}
-            <span className="font-medium">{attendanceMode || "Not set"}</span>
+              {paymentStatus === "completed" ? "Completed" : "Pending"}
+            </span>
+            .
           </p>
+          {paymentStatus !== "completed" && (
+            <button
+              onClick={handlePayment}
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            >
+              Make Payment
+            </button>
+          )}
         </div>
 
         {/* Instructions */}
         <div
           ref={instructionsRef}
-          className={`mt-10 bg-white rounded-xl shadow p-6 scroll-mt-20 transition ${
-            highlighted === "instructions" ? "bg-yellow-100" : ""
-          }`}
+          className="mt-10 bg-white rounded-xl shadow p-6 scroll-mt-20"
         >
           <h2 className="text-2xl font-bold mb-4">Important Instructions</h2>
           <ul className="list-disc list-inside text-gray-700 space-y-2">
@@ -372,6 +296,7 @@ const StudentHomePage = () => {
           >
             Generate Convocation Slip
           </button>
+
           {slipUrl && (
             <div className="mt-4">
               <a
