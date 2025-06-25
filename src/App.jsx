@@ -21,8 +21,9 @@ function App() {
         <Route path="/register/admin" element={<AdminRegister />} />
         <Route path="/register/student" element={<StudentRegister />} />
         <Route path="/home" element={<StudentHomePage />} />
-        <Route path="/documents" element={<StudentUploadForm />} />{" "}
+
         <Route path="/AdminDashboard" element={<AdminDashboard />} />
+        <Route path="/student/upload" element={<StudentUploadForm />} />
         {/* ✅ NEW */}
       </Routes>
     </BrowserRouter>
