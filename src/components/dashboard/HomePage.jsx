@@ -178,7 +178,7 @@ const StudentHomePage = () => {
           <button
             onClick={() => {
               localStorage.clear();
-              window.location.href = "/login";
+              window.location.href = "/studentlogin";
             }}
             className="text-left hover:text-blue-600"
           >
