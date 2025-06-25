@@ -150,7 +150,7 @@ const StudentHomePage = () => {
 
   const handleLogout = () => {
     localStorage.clear();
-    navigate("/studentlogin");
+    navigate("/");
   };
 
   if (loading) {
