@@ -12,10 +12,10 @@ const StudentHomePage = () => {
   const [paymentStatus, setPaymentStatus] = useState("pending");
   const [attendanceMode, setAttendanceMode] = useState("");
   const [slipUrl, setSlipUrl] = useState("");
+  const [highlighted, setHighlighted] = useState(null);
 
   const navigate = useNavigate();
 
-  // Refs for smooth scroll
   const paymentRef = useRef(null);
   const documentsRef = useRef(null);
   const instructionsRef = useRef(null);
@@ -158,6 +158,14 @@ const StudentHomePage = () => {
     navigate("/");
   };
 
+  const highlightSection = (ref, key, shouldScroll = true) => {
+    if (ref?.current) {
+      if (shouldScroll) ref.current.scrollIntoView({ behavior: "smooth" });
+      setHighlighted(key);
+      setTimeout(() => setHighlighted(null), 1500);
+    }
+  };
+
   if (loading) {
     return (
       <div className="p-10 text-center text-gray-600">
@@ -176,9 +184,7 @@ const StudentHomePage = () => {
         <hr className="mt-4 border-t border-gray-300" />
         <nav className="flex flex-col space-y-4 text-gray-700">
           <button
-            onClick={() =>
-              paymentRef.current?.scrollIntoView({ behavior: "smooth" })
-            }
+            onClick={() => highlightSection(paymentRef, "payment", false)}
             className="text-left hover:text-blue-600"
           >
             Payment
@@ -192,9 +198,7 @@ const StudentHomePage = () => {
             Documents
           </button>
           <button
-            onClick={() =>
-              instructionsRef.current?.scrollIntoView({ behavior: "smooth" })
-            }
+            onClick={() => highlightSection(instructionsRef, "instructions")}
             className="text-left hover:text-blue-600"
           >
             Instructions
@@ -224,7 +228,9 @@ const StudentHomePage = () => {
           {/* Payment Status */}
           <div
             ref={paymentRef}
-            className="bg-white rounded-xl shadow p-5 scroll-mt-20"
+            className={`bg-white rounded-xl shadow p-5 scroll-mt-20 transition ${
+              highlighted === "payment" ? "bg-yellow-100" : ""
+            }`}
           >
             <h2 className="text-xl font-semibold mb-2">Payment Status</h2>
             <p className="text-gray-600 mb-3">
@@ -264,7 +270,6 @@ const StudentHomePage = () => {
                 🔄 Refresh Status
               </button>
             </div>
-
             <p>
               Upload the photo of your identity card by clicking on the
               documents option in the sidebar.
@@ -327,7 +332,9 @@ const StudentHomePage = () => {
         {/* Instructions */}
         <div
           ref={instructionsRef}
-          className="mt-10 bg-white rounded-xl shadow p-6 scroll-mt-20"
+          className={`mt-10 bg-white rounded-xl shadow p-6 scroll-mt-20 transition ${
+            highlighted === "instructions" ? "bg-yellow-100" : ""
+          }`}
         >
           <h2 className="text-2xl font-bold mb-4">Important Instructions</h2>
           <ul className="list-disc list-inside text-gray-700 space-y-2">
@@ -365,7 +372,6 @@ const StudentHomePage = () => {
           >
             Generate Convocation Slip
           </button>
-
           {slipUrl && (
             <div className="mt-4">
               <a
