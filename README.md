@@ -103,7 +103,7 @@ npm run dev
 
 ### 🧱 High-Level Architecture Diagram
 
-```mermaid
+
 graph TD
   C[Client (Student/Faculty)] -->|HTTP Requests| V[Vercel (Frontend - React/Vite)]
   V -->|API Calls| R[Render (Backend - Node/Express)]
