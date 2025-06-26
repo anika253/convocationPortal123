@@ -20,7 +20,7 @@
 - 👥 Role-based dashboards (Student / Faculty)  
 - 🔍 File access history and logs  
 - 🤖 Gemini AI Chatbot for instant academic assistance  
-- 🐳 Docker-ready architecture *(in progress)*  
+- 🐳 Docker-ready architecture
 
 ---
 
@@ -44,7 +44,7 @@
 ### 🧰 DevOps & Tools  
 - Git & GitHub  
 - Postman  
-- Docker *(in progress)*  
+- Docker 
 - Vercel & Render  
 
 ---
