@@ -157,5 +157,3 @@ sequenceDiagram
 > 📌 *Architecture diagrams and API flows are generated using Mermaid.js and reflect real deployment and traffic flow.*
 
 ---
-
-**Made with ❤️ by Anika Sharma**
