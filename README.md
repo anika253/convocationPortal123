@@ -2,7 +2,7 @@
 
 *A Smart Academic Collaboration & Document Management Platform*
 
-> A modern, full-stack web application designed to streamline communication between **students** and **faculty**. Built with a clean UI, role-specific workflows, and powered by an integrated **Gemini AI chatbot** for seamless academic assistance.
+> A modern, full-stack web application designed to streamline communication between **students** and **faculty**. Built with a clean UI, role-specific workflows, and powered by an integrated **Gemini AI chatbot** for seamless academic assistance and Razopay UPI.
 
 ---
 
