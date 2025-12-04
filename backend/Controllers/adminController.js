@@ -3,7 +3,7 @@ const Student = require("../models/Student");
 const sendMail = require("../utils/mailer");
 const Document = require("../models/Document");
 
-// ✅ Admin Registration
+//  Admin Registration
 exports.adminRegister = async (req, res) => {
   console.log("Admin Register Received Body:", req.body);
   const { name, email, password } = req.body;
@@ -33,7 +33,7 @@ exports.adminRegister = async (req, res) => {
   }
 };
 
-// ✅ Admin Login (No hashing for testing)
+//  Admin Login (No hashing for testing)
 exports.adminLogin = async (req, res) => {
   const { email, password } = req.body;
 
@@ -73,7 +73,7 @@ exports.getAllStudents = async (req, res) => {
   }
 };
 
-// ✅ Delete Student
+//  Delete Student
 exports.deleteStudent = async (req, res) => {
   const { id } = req.params;
 
@@ -85,7 +85,7 @@ exports.deleteStudent = async (req, res) => {
   }
 };
 
-// ✅ Approve or Reject Student Status
+//  Approve or Reject Student Status
 exports.updateStudentStatus = async (req, res) => {
   const { studentId } = req.params;
   const { status, reviewedBy } = req.body; // status: "approved" | "rejected"
@@ -119,3 +119,4 @@ exports.updateStudentStatus = async (req, res) => {
     res.status(500).json({ message: "Failed to update status" });
   }
 };
+
