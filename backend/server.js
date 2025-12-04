@@ -13,7 +13,7 @@ const adminRoutes = require("./Routes/adminRoutes");
 const authRoutes = require("./Routes/authRoutes");
 const documentRoutes = require("./Routes/DocumentRoutes");
 const geminiRoutes = require("./Routes/gemini");
-const paymentRoutes = require("./Routes/paymentRoutes"); // ✅ Razorpay route added here
+const paymentRoutes = require("./Routes/paymentRoutes");
 
 const app = express();
 
@@ -49,7 +49,7 @@ app.use("/api/gemini", geminiRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/docs", documentRoutes);
-app.use("/api/payment", paymentRoutes); // ✅ Razorpay route enabled
+app.use("/api/payment", paymentRoutes); //  Razorpay route enabled
 
 // Default fallback
 app.use((req, res) => {
@@ -60,11 +60,11 @@ app.use((req, res) => {
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
-    console.log("✅ Connected to MongoDB");
+    console.log(" Connected to MongoDB");
     app.listen(5000, () => {
-      console.log("🚀 Server running on port 5000");
+      console.log(" Server running on port 5000");
     });
   })
   .catch((err) => {
-    console.error("❌ MongoDB connection error:", err);
+    console.error(" MongoDB connection error:", err);
   });
