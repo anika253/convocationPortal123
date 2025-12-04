@@ -8,7 +8,7 @@ import StudentLogin from "./components/StudentLogin";
 import AdminRegister from "./components/AdminRegister";
 import StudentRegister from "./components/StudentRegister";
 import StudentHomePage from "./components/dashboard/HomePage";
-import StudentUploadForm from "./components/dashboard/StudentUploadForm"; // ✅ NEW
+import StudentUploadForm from "./components/dashboard/StudentUploadForm"; // 
 import AdminDashboard from "./components/dashboard/AdminDashboard";
 function App() {
   return (
