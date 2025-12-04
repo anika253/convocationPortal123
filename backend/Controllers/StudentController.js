@@ -2,7 +2,7 @@ const Student = require("../models/Student");
 const sendMail = require("../utils/mailer");
 const PDFDocument = require("pdfkit");
 
-// ✅ Register or update student
+// Register or update student
 const addStudent = async (req, res) => {
   try {
     const { name, email, rollno } = req.body;
@@ -62,7 +62,7 @@ const addStudent = async (req, res) => {
   }
 };
 
-// ✅ Get all students
+//  Get all students
 const getAllStudents = async (req, res) => {
   try {
     const students = await Student.find().sort({ createdAt: -1 });
@@ -72,7 +72,7 @@ const getAllStudents = async (req, res) => {
   }
 };
 
-// ✅ Get student by email
+//  Get student by email
 const getStudentByEmail = async (req, res) => {
   try {
     const student = await Student.findOne({ email: req.params.email });
@@ -83,7 +83,7 @@ const getStudentByEmail = async (req, res) => {
   }
 };
 
-// ✅ Update status (approve/reject)
+// Update status (approve/reject)
 const updateStudentStatus = async (req, res) => {
   try {
     const { studentId } = req.params;
@@ -115,7 +115,7 @@ const updateStudentStatus = async (req, res) => {
   }
 };
 
-// ✅ Update attendance mode
+//  Update attendance mode
 const updateAttendanceMode = async (req, res) => {
   try {
     const { studentId } = req.params;
@@ -205,3 +205,4 @@ module.exports = {
   updateAttendanceMode,
   generateConvocationSlip,
 };
+
