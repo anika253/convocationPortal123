@@ -1,7 +1,6 @@
 // src/components/HomePage.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
-// Assuming you have a StudentChat component
 
 function HomePage() {
   const navigate = useNavigate();
@@ -46,3 +45,4 @@ function HomePage() {
 }
 
 export default HomePage;
+
