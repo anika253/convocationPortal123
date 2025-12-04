@@ -13,9 +13,10 @@ router.post("/register", addStudent);
 router.get("/", getAllStudents);
 router.get("/:email", getStudentByEmail);
 router.put("/status/:studentId", updateStudentStatus);
-router.get("/slip/:email", generateConvocationSlip); // ✅ No verifyStudent
+router.get("/slip/:email", generateConvocationSlip); 
 
-// ✅ Attendance update
+
 router.put("/attendance/:studentId", updateAttendanceMode);
 
 module.exports = router;
+
