@@ -138,7 +138,7 @@ const updateDocumentStatus = async (req, res) => {
 };
 
 // =====================
-// ✅ UPDATED: Get All Student Documents (by email)
+//  UPDATED: Get All Student Documents (by email)
 // =====================
 const getStudentDocuments = async (req, res) => {
   const { email } = req.params;
@@ -149,7 +149,7 @@ const getStudentDocuments = async (req, res) => {
       return res.status(404).json({ message: "Student not found" });
     }
 
-    // ✅ Return all documents for the student
+    // Return all documents for the student
     const documents = await Document.find({ studentId: student._id }).sort({
       uploadedAt: -1,
     });
@@ -170,3 +170,4 @@ module.exports = {
   updateDocumentStatus,
   getStudentDocuments,
 };
+
