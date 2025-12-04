@@ -15,7 +15,7 @@ function AdminLogin() {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "https://convocationportal123-6.onrender.com/api/admin/login", // ✅ Corrected endpoint
+        "https://convocationportal123-6.onrender.com/api/admin/login", //  Corrected endpoint
         { ...form }
       );
 
@@ -86,3 +86,4 @@ function AdminLogin() {
 }
 
 export default AdminLogin;
+
