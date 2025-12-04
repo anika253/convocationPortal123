@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 
 const documentSchema = new mongoose.Schema({
   studentId: {
-    type: mongoose.Schema.Types.ObjectId, // ✅ use ObjectId
-    ref: "Student", // ✅ reference Student model
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Student",
     required: true,
   },
   filePath: { type: String, required: true },
