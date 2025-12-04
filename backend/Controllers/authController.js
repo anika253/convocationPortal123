@@ -12,7 +12,7 @@ const registerAdmin = async (req, res) => {
         .json({ message: "Email and password are required!" });
     }
 
-    // Store the password in plain text (no hashing)
+    // Store the password in plain text 
     const newAdmin = new Admin({
       email: req.body.email,
       password: req.body.password, // Store password as plain text
@@ -114,7 +114,7 @@ const loginStudent = async (req, res) => {
     if (!student) {
       return res.status(404).json({ message: "Student not found" });
     }
-    // Check password - you can modify this part later when you implement hashing
+    
     if (req.body.password !== student.password) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
@@ -142,3 +142,4 @@ module.exports = {
   registerAdmin,
   loginAdmin,
 };
+
